@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendario attività — AGGS Como</title>
+  <meta name="description" content="Scopri le prossime attività, uscite e campi dell'AGGS Como. Iscriviti direttamente online.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://esm.sh">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <main id="main-content">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span aria-hidden="true">›</span>
+          <span aria-current="page">Calendario</span>
+        </nav>
+        <h1>Calendario attività</h1>
+        <p class="section-subtitle">Tutte le uscite, i campi, le riunioni e gli eventi in programma.</p>
+      </div>
+    </div>
+
+    <div class="section" style="padding-top:var(--space-lg)">
+      <div class="container">
+
+        <!-- BARRA CONTROLLI -->
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--space-md);margin-bottom:var(--space-xl)">
+
+          <!-- Filtri tipo -->
+          <div>
+            <div class="filter-pills" role="group" aria-label="Filtra per tipo">
+              <button class="pill active" data-tipo="tutti">Tutti</button>
+              <button class="pill" data-tipo="uscita_giorno">Uscite</button>
+              <button class="pill" data-tipo="campo">Campi</button>
+              <button class="pill" data-tipo="riunione">Riunioni</button>
+              <button class="pill" data-tipo="evento">Eventi</button>
+            </div>
+            <div id="filtro-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+          </div>
+
+          <!-- Toggle vista -->
+          <div style="display:flex;gap:0;border:1.5px solid var(--color-border);border-radius:var(--radius-sm);overflow:hidden" role="group" aria-label="Cambia vista">
+            <button class="btn btn-sm active" data-vista="lista"
+                    style="border-radius:0;border:none;background:var(--color-primary);color:#fff"
+                    aria-pressed="true">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <rect x="1" y="2" width="14" height="2.5" rx="1" fill="currentColor"/>
+                <rect x="1" y="6.75" width="14" height="2.5" rx="1" fill="currentColor"/>
+                <rect x="1" y="11.5" width="14" height="2.5" rx="1" fill="currentColor"/>
+              </svg>
+              Lista
+            </button>
+            <button class="btn btn-sm" data-vista="griglia"
+                    style="border-radius:0;border:none;border-left:1.5px solid var(--color-border)"
+                    aria-pressed="false">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor"/>
+                <rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor"/>
+                <rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+                <rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+              </svg>
+              Mese
+            </button>
+          </div>
+
+        </div>
+
+        <!-- VISTA LISTA -->
+        <div id="lista-view">
+          <div id="lista-container" style="display:flex;flex-direction:column;gap:var(--space-md)">
+            <div class="loading-overlay">
+              <span class="spinner"></span>
+              <span>Caricamento attività…</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- VISTA GRIGLIA (nascosta) -->
+        <div id="griglia-view" class="hidden">
+
+          <!-- Navigazione mese -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-lg)">
+            <button class="btn btn-outline btn-sm" id="mese-prec" aria-label="Mese precedente">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <h2 id="mese-label" style="font-size:1.25rem;color:var(--color-primary);text-transform:capitalize"></h2>
+            <button class="btn btn-outline btn-sm" id="mese-succ" aria-label="Mese successivo">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <div id="griglia-container"></div>
+
+          <!-- Legenda -->
+          <div style="display:flex;flex-wrap:wrap;gap:var(--space-md);margin-top:var(--space-lg)">
+            <span style="font-size:0.8125rem;color:var(--color-text-muted);font-weight:600">Legenda:</span>
+            <span class="badge badge-uscita_giorno">Uscita</span>
+            <span class="badge badge-campo">Campo</span>
+            <span class="badge badge-riunione">Riunione</span>
+            <span class="badge badge-evento">Evento</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script type="module" src="js/components.js"></script>
+  <script type="module" src="js/calendario.js"></script>
+</body>
+</html>

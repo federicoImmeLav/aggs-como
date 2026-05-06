@@ -1,0 +1,91 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ──────────────────────────────────────────────
+// INIT
+// ──────────────────────────────────────────────
+
+function init() {
+  document.getElementById('form-mailing').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validaForm()) return;
+    await inviaIscrizione();
+  });
+}
+
+// ──────────────────────────────────────────────
+// VALIDAZIONE
+// ──────────────────────────────────────────────
+
+function validaForm() {
+  let valido = true;
+
+  document.querySelectorAll('.form-group.has-error').forEach(g => g.classList.remove('has-error'));
+
+  function segnaErrore(id) {
+    const el = document.getElementById(id);
+    if (el) el.closest('.form-group')?.classList.add('has-error');
+    valido = false;
+  }
+
+  if (!document.getElementById('email')?.value.includes('@'))  segnaErrore('email');
+  if (!document.getElementById('consenso_privacy')?.checked)   segnaErrore('consenso_privacy');
+
+  if (!valido) {
+    document.querySelector('.form-group.has-error')
+      ?.querySelector('input, select')
+      ?.focus();
+  }
+
+  return valido;
+}
+
+// ──────────────────────────────────────────────
+// SUBMIT
+// ──────────────────────────────────────────────
+
+async function inviaIscrizione() {
+  const btn    = document.getElementById('btn-submit');
+  const errBox = document.getElementById('form-error-generale');
+
+  btn.disabled  = true;
+  btn.innerHTML = '<span class="spinner"></span> Invio in corso…';
+  errBox.classList.add('hidden');
+
+  const tipo = document.getElementById('tipo').value;
+
+  const payload = {
+    email:            document.getElementById('email').value.trim().toLowerCase(),
+    nome:             document.getElementById('nome').value.trim() || null,
+    tipo:             tipo || null,
+    consenso_privacy: true,
+    attivo:           true,
+  };
+
+  const { error } = await supabase.from('contatti').insert(payload);
+
+  if (error) {
+    btn.disabled  = false;
+    btn.innerHTML = 'Iscriviti alla newsletter';
+
+    // Email già presente (violazione unique)
+    if (error.code === '23505') {
+      errBox.textContent = 'Questa email è già iscritta alla newsletter.';
+    } else {
+      errBox.textContent = `Si è verificato un errore: ${error.message}. Riprova o scrivici a info@aggscomo.it.`;
+    }
+    errBox.classList.remove('hidden');
+    return;
+  }
+
+  document.getElementById('form-fields').classList.add('hidden');
+  document.getElementById('form-success').classList.remove('hidden');
+}
+
+// ──────────────────────────────────────────────
+// START
+// ──────────────────────────────────────────────
+
+init();

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AGGS Como — Associazione Guide e Scout</title>
+  <meta name="description" content="Benvenuti all'AGGS Como! Scopri le attività scout per bambini e ragazzi, iscriviti e partecipa alla nostra comunità.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://esm.sh">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <main id="main-content">
+
+    <!-- HERO -->
+    <section class="hero" aria-label="Benvenuti">
+      <div class="container">
+        <p class="hero-eyebrow">Associazione Guide e Scout — Como</p>
+        <h1>Cresci, esplora,<br>lascia il mondo migliore</h1>
+        <p>Un'associazione di scout e guide che accompagna bambini e ragazzi nel loro percorso di crescita attraverso l'avventura, la natura e i valori del metodo scout.</p>
+        <div class="hero-actions">
+          <a href="iscrizione.html" class="btn btn-accent btn-lg">Iscriviti all'associazione</a>
+          <a href="calendario.html" class="btn btn-outline-white btn-lg">Vedi le attività</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHI SIAMO — SINTESI -->
+    <section class="section" aria-labelledby="section-chi-siamo">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title" id="section-chi-siamo">Chi siamo</h2>
+          <p class="section-subtitle">Una grande famiglia che cresce insieme da decenni nel territorio comasco.</p>
+        </div>
+
+        <div class="cards-grid">
+          <div class="card card-body">
+            <div style="font-size:2rem;margin-bottom:var(--space-md)" aria-hidden="true">🐺</div>
+            <h3 style="color:var(--color-primary);margin-bottom:var(--space-sm)">Lupetti e Coccinelle</h3>
+            <p class="text-muted" style="max-width:none">Per i bambini dagli 8 agli 11 anni: giochi, laboratori e prime avventure all'aria aperta.</p>
+          </div>
+          <div class="card card-body">
+            <div style="font-size:2rem;margin-bottom:var(--space-md)" aria-hidden="true">⚜️</div>
+            <h3 style="color:var(--color-primary);margin-bottom:var(--space-sm)">Scout e Guide</h3>
+            <p class="text-muted" style="max-width:none">Per i ragazzi dagli 11 ai 16 anni: uscite, campi estivi e tecniche di sopravvivenza.</p>
+          </div>
+        </div>
+
+        <div class="mt-xl">
+          <a href="storia.html" class="btn btn-outline">Scopri la nostra storia</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PERCHÉ SCEGLIERE GLI SCOUT -->
+    <section class="section section-alt" aria-labelledby="section-perche">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title" id="section-perche">Perché scegliere gli scout?</h2>
+          <p class="section-subtitle">Il metodo scout forma persone capaci, responsabili e felici.</p>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr;gap:var(--space-lg)">
+          <div style="display:flex;gap:var(--space-md);align-items:flex-start">
+            <div style="flex-shrink:0;width:2.5rem;height:2.5rem;background:var(--color-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700">1</div>
+            <div>
+              <h4 style="margin-bottom:var(--space-xs)">Natura e avventura</h4>
+              <p class="text-muted" style="max-width:none">Uscite, campi e attività all'aperto che sviluppano autonomia, problem solving e amore per l'ambiente.</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:var(--space-md);align-items:flex-start">
+            <div style="flex-shrink:0;width:2.5rem;height:2.5rem;background:var(--color-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700">2</div>
+            <div>
+              <h4 style="margin-bottom:var(--space-xs)">Valori e comunità</h4>
+              <p class="text-muted" style="max-width:none">I ragazzi imparano il rispetto, la solidarietà e la cittadinanza attiva in un ambiente sicuro e accogliente.</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:var(--space-md);align-items:flex-start">
+            <div style="flex-shrink:0;width:2.5rem;height:2.5rem;background:var(--color-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700">3</div>
+            <div>
+              <h4 style="margin-bottom:var(--space-xs)">Crescita progressiva</h4>
+              <p class="text-muted" style="max-width:none">Un percorso strutturato che accompagna i ragazzi dall'infanzia all'età adulta, con ruoli e responsabilità crescenti.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AVVISI -->
+    <section class="section" id="section-avvisi" aria-labelledby="heading-avvisi"
+             style="display:none">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title" id="heading-avvisi">Avvisi</h2>
+          <p class="section-subtitle">Comunicazioni importanti per scout e famiglie.</p>
+        </div>
+        <div id="avvisi-list" style="display:flex;flex-direction:column;gap:var(--space-md)"></div>
+      </div>
+    </section>
+
+    <!-- PROSSIME ATTIVITÀ — TEASER -->
+    <section class="section" aria-labelledby="section-attivita">
+      <div class="container">
+        <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-md)">
+          <div>
+            <h2 class="section-title" id="section-attivita">Prossime attività</h2>
+            <p class="section-subtitle">Scopri cosa abbiamo in programma per le prossime settimane.</p>
+          </div>
+          <a href="calendario.html" class="btn btn-outline">Vedi tutto il calendario</a>
+        </div>
+
+        <div id="attivita-preview" class="cards-grid">
+          <!-- Caricato da JS -->
+          <div class="loading-overlay" style="grid-column:1/-1">
+            <span class="spinner"></span>
+            <span>Caricamento attività…</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALL TO ACTION ISCRIZIONE -->
+    <section class="section" style="background:var(--color-primary);color:#fff" aria-labelledby="section-cta">
+      <div class="container text-center">
+        <h2 id="section-cta" style="color:#fff;margin-bottom:var(--space-md)">Pronto a unirti a noi?</h2>
+        <p style="color:rgba(255,255,255,0.85);max-width:52ch;margin-inline:auto;margin-bottom:var(--space-xl)">
+          Le iscrizioni per l'anno associativo sono aperte. Compila il modulo online in pochi minuti.
+        </p>
+        <div style="display:flex;gap:var(--space-md);justify-content:center;flex-wrap:wrap">
+          <a href="iscrizione.html" class="btn btn-accent btn-lg">Iscriviti ora</a>
+          <a href="contatti.html" class="btn btn-outline-white btn-lg">Hai domande? Scrivici</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script type="module" src="js/components.js"></script>
+  <script type="module" src="js/home.js"></script>
+</body>
+</html>

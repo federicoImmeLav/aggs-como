@@ -1,0 +1,510 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const TIPO_LABEL = {
+  uscita_giorno: 'Uscita',
+  campo:         'Campo',
+  riunione:      'Riunione',
+  evento:        'Evento',
+};
+
+// ──────────────────────────────────────────────
+// INIT
+// ──────────────────────────────────────────────
+
+async function init() {
+  const id = new URLSearchParams(window.location.search).get('id');
+
+  if (!id) {
+    mostraErrore('Nessuna attività specificata.', true);
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from('attivita')
+    .select('*')
+    .eq('id', id)
+    .eq('attiva', true)
+    .maybeSingle();
+
+  if (error || !data) {
+    mostraErrore("Attività non trovata o non più disponibile.", true);
+    return;
+  }
+
+  document.title = `${data.nome} — AGGS Como`;
+  renderPagina(data);
+}
+
+// ──────────────────────────────────────────────
+// RENDER PAGINA
+// ──────────────────────────────────────────────
+
+function renderPagina(a) {
+  const isMultiDay     = a.data_fine && a.data_fine !== a.data_inizio;
+  const showNoteMediche = a.tipo === 'campo' || (a.tipo === 'uscita_giorno' && isMultiDay);
+  const campiExtra     = Array.isArray(a.campi_extra) ? a.campi_extra : [];
+  const docList        = Array.isArray(a.documenti) ? a.documenti.filter(d => d.url) : [];
+  const tipoLabel      = TIPO_LABEL[a.tipo] || a.tipo;
+
+  const dataFineHTML = isMultiDay
+    ? `<span aria-hidden="true"> – </span>${formatData(a.data_fine)}`
+    : '';
+
+  const immaginHTML = a.immagine_url
+    ? `<img src="${a.immagine_url}" alt="${a.nome}"
+            style="width:100%;max-height:380px;object-fit:cover;border-radius:var(--radius-md);margin-bottom:var(--space-xl)"
+            loading="eager">`
+    : '';
+
+  const quotaHTML = a.quota > 0
+    ? `<div style="display:flex;align-items:center;gap:var(--space-sm)">
+         <span class="text-muted">Quota di partecipazione:</span>
+         <strong style="font-size:1.125rem;color:var(--color-primary)">€${Number(a.quota).toLocaleString('it-IT')}</strong>
+       </div>`
+    : '';
+
+  const unitaHTML = a.unita_target && a.unita_target !== 'tutti'
+    ? `<p class="text-sm text-muted">Riservata a: <strong>${a.unita_target}</strong></p>`
+    : '';
+
+  const documentiHTML = docList.length
+    ? `<div style="margin-bottom:var(--space-xl)">
+         <h2 style="font-size:1.25rem;color:var(--color-primary);margin-bottom:var(--space-xs)">Documenti da scaricare</h2>
+         <p class="text-sm text-muted" style="margin-bottom:var(--space-md)">
+           Scarica il documento, compilalo e invialo via email alla segreteria.
+         </p>
+         <div style="display:flex;flex-direction:column;gap:var(--space-sm)">
+           ${docList.map(d => `
+             <a href="${d.url}" target="_blank" rel="noopener"
+                style="display:flex;align-items:center;gap:var(--space-md);
+                       padding:var(--space-md);background:var(--color-surface);
+                       border:1px solid var(--color-border);border-radius:var(--radius-md);
+                       text-decoration:none;color:var(--color-text)">
+               <span style="font-size:1.375rem;flex-shrink:0" aria-hidden="true">📄</span>
+               <span style="flex:1;font-weight:500">${d.nome}</span>
+               <span class="btn btn-outline btn-sm" style="flex-shrink:0">Scarica PDF</span>
+             </a>`).join('')}
+         </div>
+       </div>`
+    : '';
+
+  const formHTML = a.ha_form_iscrizione
+    ? buildFormHTML(showNoteMediche, campiExtra)
+    : (a.nota_iscrizioni
+        ? `<div class="alert alert-info"><span>${a.nota_iscrizioni}</span></div>`
+        : '');
+
+  document.getElementById('page-content').innerHTML = `
+
+    <!-- BREADCRUMB + HEADER -->
+    <div class="page-header">
+      <div class="container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span aria-hidden="true">›</span>
+          <a href="calendario.html">Calendario</a>
+          <span aria-hidden="true">›</span>
+          <span aria-current="page">${a.nome}</span>
+        </nav>
+        <div style="display:flex;align-items:flex-start;gap:var(--space-md);flex-wrap:wrap;margin-top:var(--space-sm)">
+          <div style="flex:1;min-width:0">
+            <span class="badge badge-${a.tipo}" style="margin-bottom:var(--space-sm)">${tipoLabel}</span>
+            <h1>${a.nome}</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" style="padding-top:var(--space-xl)">
+      <div class="container">
+        <div style="display:grid;grid-template-columns:1fr;gap:var(--space-2xl)">
+
+          <!-- COLONNA DETTAGLI -->
+          <div style="max-width:720px">
+            ${immaginHTML}
+
+            <!-- Meta info -->
+            <div style="display:flex;flex-wrap:wrap;gap:var(--space-lg);margin-bottom:var(--space-xl);padding:var(--space-lg);background:var(--color-primary-light);border-radius:var(--radius-md)">
+              <div>
+                <p class="text-xs text-muted font-semibold" style="text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">
+                  ${isMultiDay ? 'Date' : 'Data'}
+                </p>
+                <p style="font-weight:600;color:var(--color-text)">
+                  <time datetime="${a.data_inizio}">${formatData(a.data_inizio)}</time>${dataFineHTML}
+                </p>
+              </div>
+              ${quotaHTML ? `<div>
+                <p class="text-xs text-muted font-semibold" style="text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Quota</p>
+                <div>${quotaHTML}</div>
+              </div>` : ''}
+              ${unitaHTML ? `<div><p class="text-xs text-muted font-semibold" style="text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Unità</p>${unitaHTML}</div>` : ''}
+            </div>
+
+            <!-- Descrizione -->
+            ${a.descrizione
+              ? `<div style="margin-bottom:var(--space-xl)">
+                   <h2 style="font-size:1.25rem;color:var(--color-primary);margin-bottom:var(--space-md)">Descrizione</h2>
+                   <div style="white-space:pre-line;line-height:1.7">${a.descrizione}</div>
+                 </div>`
+              : ''}
+
+            <!-- Documenti scaricabili -->
+            ${documentiHTML}
+
+            <!-- Form iscrizione -->
+            <div id="iscrizione-section">
+              ${(a.ha_form_iscrizione || a.nota_iscrizioni)
+                ? `<h2 style="font-size:1.25rem;color:var(--color-primary);margin-bottom:var(--space-lg)">Iscrizione</h2>`
+                : ''}
+              ${formHTML}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  `;
+
+  if (a.ha_form_iscrizione) {
+    initForm(a, showNoteMediche, campiExtra);
+  }
+}
+
+// ──────────────────────────────────────────────
+// BUILD FORM HTML
+// ──────────────────────────────────────────────
+
+function buildFormHTML(showNoteMediche, campiExtra) {
+  const extraHTML = campiExtra.length
+    ? `<fieldset class="form-section">
+         <legend>Informazioni aggiuntive</legend>
+         ${campiExtra.map(renderCampoExtra).join('')}
+       </fieldset>`
+    : '';
+
+  const noteMedicheHTML = showNoteMediche
+    ? `<fieldset class="form-section">
+         <legend>Note sanitarie</legend>
+         <div class="form-group">
+           <label class="form-label" for="note_mediche">
+             Allergie, intolleranze o condizioni mediche rilevanti
+           </label>
+           <textarea id="note_mediche" name="note_mediche" class="form-control"
+                     rows="3" placeholder="Scrivi qui eventuali note mediche…"></textarea>
+           <span class="form-hint">Lascia vuoto se non ci sono indicazioni particolari.</span>
+         </div>
+       </fieldset>`
+    : '';
+
+  return `
+<form id="form-iscrizione" class="form-page" novalidate>
+  <div id="form-success" class="alert alert-success hidden" role="alert">
+    <span>
+      <strong>Iscrizione inviata!</strong> Riceverai una email di conferma a breve.
+      Torna al <a href="calendario.html">calendario</a> per scoprire altre attività.
+    </span>
+  </div>
+
+  <div id="form-fields">
+
+    <!-- DATI PARTECIPANTE -->
+    <fieldset class="form-section">
+      <legend>Dati del partecipante</legend>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="nome">Nome <span class="required" aria-hidden="true">*</span></label>
+          <input type="text" id="nome" name="nome" class="form-control"
+                 autocomplete="given-name" required placeholder="Mario">
+          <span class="form-error" id="err-nome">Inserisci il nome.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cognome">Cognome <span class="required" aria-hidden="true">*</span></label>
+          <input type="text" id="cognome" name="cognome" class="form-control"
+                 autocomplete="family-name" required placeholder="Rossi">
+          <span class="form-error" id="err-cognome">Inserisci il cognome.</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="data_nascita">
+          Data di nascita <span class="required" aria-hidden="true">*</span>
+        </label>
+        <input type="date" id="data_nascita" name="data_nascita" class="form-control"
+               required autocomplete="bday">
+        <span class="form-hint">Serve per determinare se è necessario il consenso del genitore.</span>
+        <span class="form-error" id="err-data_nascita">Inserisci la data di nascita.</span>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="email_contatto">
+            Email <span class="required" aria-hidden="true">*</span>
+          </label>
+          <input type="email" id="email_contatto" name="email_contatto" class="form-control"
+                 autocomplete="email" required placeholder="mario.rossi@email.it">
+          <span class="form-error" id="err-email_contatto">Inserisci un indirizzo email valido.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="telefono">Telefono</label>
+          <input type="tel" id="telefono" name="telefono" class="form-control"
+                 autocomplete="tel" placeholder="+39 333 1234567">
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- DATI GENITORE (mostrato se minorenne) -->
+    <fieldset class="form-section hidden" id="sezione-genitore">
+      <legend>Dati del genitore / tutore</legend>
+      <span class="form-hint" style="display:block;margin-bottom:var(--space-md)">
+        Il partecipante è minorenne: compila i dati del genitore o tutore legale.
+      </span>
+      <div class="form-group">
+        <label class="form-label" for="nome_genitore">
+          Nome e cognome del genitore <span class="required" aria-hidden="true">*</span>
+        </label>
+        <input type="text" id="nome_genitore" name="nome_genitore" class="form-control"
+               autocomplete="name" placeholder="Anna Rossi">
+        <span class="form-error" id="err-nome_genitore">Inserisci il nome del genitore.</span>
+      </div>
+    </fieldset>
+
+    ${noteMedicheHTML}
+    ${extraHTML}
+
+    <!-- CONSENSO PRIVACY -->
+    <fieldset class="form-section">
+      <legend>Consenso</legend>
+      <div class="form-group">
+        <label class="form-check">
+          <input type="checkbox" id="consenso_privacy" name="consenso_privacy" required>
+          <span class="form-check-label">
+            Ho letto e accetto la <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.
+            Acconsento al trattamento dei dati personali per la gestione dell'iscrizione.
+            <span class="required" aria-hidden="true">*</span>
+          </span>
+        </label>
+        <span class="form-error" id="err-consenso_privacy">Devi accettare la privacy policy per procedere.</span>
+      </div>
+    </fieldset>
+
+    <div id="form-error-generale" class="alert alert-error hidden" role="alert"></div>
+
+    <button type="submit" class="btn btn-accent btn-lg btn-full" id="btn-submit">
+      Invia iscrizione
+    </button>
+
+  </div>
+</form>
+  `.trim();
+}
+
+function renderCampoExtra(campo) {
+  const req = campo.obbligatorio
+    ? `<span class="required" aria-hidden="true">*</span>` : '';
+
+  let input = '';
+  switch (campo.tipo) {
+    case 'testo_breve':
+      input = `<input type="text" id="extra_${campo.id}" name="extra_${campo.id}"
+                      class="form-control" ${campo.obbligatorio ? 'required' : ''}>`;
+      break;
+    case 'numero':
+      input = `<input type="number" id="extra_${campo.id}" name="extra_${campo.id}"
+                      class="form-control" ${campo.obbligatorio ? 'required' : ''}>`;
+      break;
+    case 'data':
+      input = `<input type="date" id="extra_${campo.id}" name="extra_${campo.id}"
+                      class="form-control" ${campo.obbligatorio ? 'required' : ''}>`;
+      break;
+    case 'checkbox':
+      return `
+        <div class="form-group">
+          <label class="form-check">
+            <input type="checkbox" id="extra_${campo.id}" name="extra_${campo.id}"
+                   ${campo.obbligatorio ? 'required' : ''}>
+            <span class="form-check-label">${campo.label} ${req}</span>
+          </label>
+        </div>`;
+    case 'select':
+      const opzioni = (campo.opzioni || [])
+        .map(o => `<option value="${o}">${o}</option>`)
+        .join('');
+      input = `<select id="extra_${campo.id}" name="extra_${campo.id}"
+                       class="form-control" ${campo.obbligatorio ? 'required' : ''}>
+                 <option value="">Seleziona…</option>
+                 ${opzioni}
+               </select>`;
+      break;
+    default:
+      input = `<input type="text" id="extra_${campo.id}" name="extra_${campo.id}" class="form-control">`;
+  }
+
+  return `
+    <div class="form-group">
+      <label class="form-label" for="extra_${campo.id}">${campo.label} ${req}</label>
+      ${input}
+    </div>`;
+}
+
+// ──────────────────────────────────────────────
+// FORM LOGIC
+// ──────────────────────────────────────────────
+
+function initForm(attivita, showNoteMediche, campiExtra) {
+  const form          = document.getElementById('form-iscrizione');
+  const dataNascitaEl = document.getElementById('data_nascita');
+  const sezioneGen    = document.getElementById('sezione-genitore');
+  const nomeGenEl     = document.getElementById('nome_genitore');
+
+  // Mostra/nasconde sezione genitore in base all'età
+  dataNascitaEl.addEventListener('change', () => {
+    const minore = isMinorenne(dataNascitaEl.value);
+    sezioneGen.classList.toggle('hidden', !minore);
+    if (nomeGenEl) nomeGenEl.required = minore;
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validaForm(form, campiExtra)) return;
+    await inviaIscrizione(form, attivita, campiExtra);
+  });
+}
+
+function isMinorenne(dataNascita) {
+  if (!dataNascita) return false;
+  const nascita = new Date(dataNascita + 'T00:00:00');
+  const oggi    = new Date();
+  let eta = oggi.getFullYear() - nascita.getFullYear();
+  const m = oggi.getMonth() - nascita.getMonth();
+  if (m < 0 || (m === 0 && oggi.getDate() < nascita.getDate())) eta--;
+  return eta < 18;
+}
+
+function validaForm(form, campiExtra) {
+  let valido = true;
+
+  // Rimuovi errori precedenti
+  form.querySelectorAll('.form-group.has-error').forEach(g => g.classList.remove('has-error'));
+
+  function segnaErrore(id) {
+    const el = document.getElementById(id);
+    if (el) el.closest('.form-group')?.classList.add('has-error');
+    valido = false;
+  }
+
+  const nome         = form.querySelector('#nome');
+  const cognome      = form.querySelector('#cognome');
+  const dataNascita  = form.querySelector('#data_nascita');
+  const email        = form.querySelector('#email_contatto');
+  const privacy      = form.querySelector('#consenso_privacy');
+  const nomeGenitore = form.querySelector('#nome_genitore');
+
+  if (!nome?.value.trim())        segnaErrore('nome');
+  if (!cognome?.value.trim())     segnaErrore('cognome');
+  if (!dataNascita?.value)        segnaErrore('data_nascita');
+  if (!email?.value.includes('@')) segnaErrore('email_contatto');
+  if (!privacy?.checked)          segnaErrore('consenso_privacy');
+
+  if (nomeGenitore?.required && !nomeGenitore.value.trim()) {
+    segnaErrore('nome_genitore');
+  }
+
+  // Campi extra obbligatori
+  campiExtra.filter(c => c.obbligatorio).forEach(c => {
+    const el = form.querySelector(`#extra_${c.id}`);
+    if (!el) return;
+    const vuoto = el.type === 'checkbox' ? !el.checked : !el.value.trim();
+    if (vuoto) {
+      el.closest('.form-group')?.classList.add('has-error');
+      valido = false;
+    }
+  });
+
+  if (!valido) {
+    form.querySelector('.form-group.has-error')
+        ?.querySelector('input, select, textarea')
+        ?.focus();
+  }
+
+  return valido;
+}
+
+async function inviaIscrizione(form, attivita, campiExtra) {
+  const btn     = document.getElementById('btn-submit');
+  const errBox  = document.getElementById('form-error-generale');
+
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spinner"></span> Invio in corso…`;
+  errBox.classList.add('hidden');
+
+  // Raccoglie risposte campi extra
+  const risposteExtra = {};
+  campiExtra.forEach(c => {
+    const el = form.querySelector(`#extra_${c.id}`);
+    if (!el) return;
+    risposteExtra[c.id] = el.type === 'checkbox' ? el.checked : el.value;
+  });
+
+  const payload = {
+    attivita_id:    attivita.id,
+    nome:           form.querySelector('#nome').value.trim(),
+    cognome:        form.querySelector('#cognome').value.trim(),
+    data_nascita:   form.querySelector('#data_nascita').value,
+    email_contatto: form.querySelector('#email_contatto').value.trim(),
+    telefono:       form.querySelector('#telefono')?.value.trim() || null,
+    nome_genitore:  form.querySelector('#nome_genitore')?.value.trim() || null,
+    note_mediche:   form.querySelector('#note_mediche')?.value.trim() || null,
+    risposte_extra: risposteExtra,
+    consenso_privacy: true,
+  };
+
+  const { error } = await supabase.from('iscrizioni_attivita').insert(payload);
+
+  if (error) {
+    btn.disabled = false;
+    btn.innerHTML = 'Invia iscrizione';
+    errBox.textContent = `Si è verificato un errore: ${error.message}. Riprova o contattaci direttamente.`;
+    errBox.classList.remove('hidden');
+    return;
+  }
+
+  // Successo
+  document.getElementById('form-fields').classList.add('hidden');
+  document.getElementById('form-success').classList.remove('hidden');
+  window.scrollTo({ top: document.getElementById('form-iscrizione').offsetTop - 80, behavior: 'smooth' });
+}
+
+// ──────────────────────────────────────────────
+// UTILITÀ
+// ──────────────────────────────────────────────
+
+function formatData(iso) {
+  if (!iso) return '';
+  return new Date(iso + 'T00:00:00').toLocaleDateString('it-IT', {
+    day: 'numeric', month: 'long', year: 'numeric',
+  });
+}
+
+function mostraErrore(msg, conLink = false) {
+  document.getElementById('page-content').innerHTML = `
+    <div class="section">
+      <div class="container-sm">
+        <div class="empty-state">
+          <div class="empty-state-icon" aria-hidden="true">😕</div>
+          <p>${msg}</p>
+          ${conLink ? `<a href="calendario.html" class="btn btn-primary mt-md">Torna al calendario</a>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ──────────────────────────────────────────────
+// START
+// ──────────────────────────────────────────────
+
+init();

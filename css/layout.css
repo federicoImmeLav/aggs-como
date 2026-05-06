@@ -1,0 +1,662 @@
+/* ============================================================
+   CONTAINER
+   ============================================================ */
+
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+}
+
+.container-sm {
+  width: 100%;
+  max-width: 720px;
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.site-header {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+  gap: var(--space-lg);
+}
+
+.site-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.site-logo img {
+  height: 2.5rem;
+  width: auto;
+}
+
+.site-logo-name {
+  font-weight: 700;
+  font-size: 1.0625rem;
+  color: var(--color-primary);
+  line-height: 1.2;
+}
+
+.site-logo-name span {
+  display: block;
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* Nav principale */
+.site-nav {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+}
+
+.site-nav a {
+  padding: 0.5rem 0.875rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.site-nav a:hover,
+.site-nav a.active {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+/* Bottone "Iscriviti" nell'header */
+.header-cta {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .header-cta {
+    display: inline-flex;
+  }
+}
+
+/* Hamburger (mobile) */
+.nav-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  transition: background-color var(--transition);
+}
+
+.nav-toggle:hover {
+  background-color: var(--color-primary-light);
+}
+
+@media (min-width: 768px) {
+  .nav-toggle {
+    display: none;
+  }
+}
+
+/* Menu mobile */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  top: 4rem;
+  background-color: var(--color-surface);
+  z-index: 190;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+}
+
+.mobile-menu.is-open {
+  transform: translateX(0);
+}
+
+@media (min-width: 768px) {
+  .mobile-menu {
+    display: none;
+  }
+}
+
+.mobile-menu a {
+  padding: 0.875rem var(--space-md);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: var(--color-text);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.mobile-menu a:hover,
+.mobile-menu a.active {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.site-footer {
+  background-color: var(--color-primary);
+  color: rgba(255,255,255,0.85);
+  padding: var(--space-2xl) 0 var(--space-lg);
+  margin-top: var(--space-2xl);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+}
+
+@media (min-width: 600px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+}
+
+.footer-brand .site-logo-name {
+  color: #ffffff;
+}
+
+.footer-brand .site-logo-name span {
+  color: rgba(255,255,255,0.6);
+}
+
+.footer-tagline {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.65);
+  margin-top: var(--space-sm);
+  max-width: 32ch;
+}
+
+.footer-heading {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: var(--space-md);
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.footer-links a {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  transition: color var(--transition);
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+}
+
+.footer-bottom {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(255,255,255,0.15);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  font-size: 0.8125rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.footer-bottom a {
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+}
+.footer-bottom a:hover {
+  color: #ffffff;
+}
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+
+.page-main {
+  padding-block: var(--space-2xl);
+  min-height: calc(100vh - 4rem);
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.hero {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #005bb5 100%);
+  color: #ffffff;
+  padding: var(--space-2xl) 0;
+  text-align: center;
+}
+
+.hero-eyebrow {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: var(--space-sm);
+}
+
+.hero h1 {
+  color: #ffffff;
+  margin-bottom: var(--space-md);
+}
+
+.hero p {
+  font-size: 1.125rem;
+  color: rgba(255,255,255,0.85);
+  max-width: 52ch;
+  margin-inline: auto;
+  margin-bottom: var(--space-xl);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  justify-content: center;
+}
+
+/* ============================================================
+   SEZIONE PAGINA
+   ============================================================ */
+
+.section {
+  padding-block: var(--space-2xl);
+}
+
+.section-alt {
+  background-color: var(--color-primary-light);
+}
+
+.section-header {
+  margin-bottom: var(--space-xl);
+}
+
+.section-title {
+  color: var(--color-primary);
+}
+
+.section-subtitle {
+  color: var(--color-text-muted);
+  font-size: 1.0625rem;
+  margin-top: var(--space-sm);
+  max-width: 60ch;
+}
+
+/* ============================================================
+   GRIGLIA CARD
+   ============================================================ */
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 600px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ============================================================
+   PAGE HEADER (interno pagine)
+   ============================================================ */
+
+.page-header {
+  background-color: var(--color-primary-light);
+  padding: var(--space-xl) 0;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-xl);
+}
+
+.page-header h1 {
+  color: var(--color-primary);
+}
+
+.page-header .breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.page-header .breadcrumb a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+.page-header .breadcrumb a:hover {
+  color: var(--color-primary);
+}
+
+/* ============================================================
+   FORM LAYOUT
+   ============================================================ */
+
+.form-page {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-xl);
+  border: 1px solid var(--color-border);
+}
+
+@media (max-width: 480px) {
+  .form-page {
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+  }
+}
+
+/* ============================================================
+   ADMIN LAYOUT
+   ============================================================ */
+
+.admin-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--color-border);
+  margin-bottom: var(--space-xl);
+  overflow-x: auto;
+}
+
+.admin-tab {
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  white-space: nowrap;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.admin-tab:hover {
+  color: var(--color-primary);
+}
+
+.admin-tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* ============================================================
+   CALENDARIO — GRIGLIA MENSILE
+   ============================================================ */
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background-color: var(--color-border);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.cal-day-name {
+  background-color: var(--color-primary-light);
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-transform: uppercase;
+}
+
+.cal-day {
+  background-color: var(--color-surface);
+  min-height: 5rem;
+  padding: var(--space-xs);
+  position: relative;
+}
+
+.cal-day.other-month {
+  background-color: var(--color-bg);
+}
+
+.cal-day.today .cal-day-num {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.cal-day-num {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cal-events {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cal-event-dot {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  padding: 1px 4px;
+  border-radius: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: opacity var(--transition);
+}
+
+.cal-event-dot:hover {
+  opacity: 0.75;
+}
+
+/* Griglia mensile: leggibile anche su schermi piccoli */
+@media (max-width: 540px) {
+  .cal-grid {
+    font-size: 0.6875rem;
+  }
+  .cal-day {
+    min-height: 3rem;
+    padding: 2px;
+  }
+  .cal-day-name {
+    font-size: 0.5625rem;
+    padding: 4px 2px;
+  }
+  .cal-day-num {
+    font-size: 0.625rem;
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+  .cal-event-dot {
+    font-size: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    padding: 0;
+    margin: 1px auto;
+    display: block;
+  }
+}
+
+/* Immagine card attività lista: responsiva */
+.card-attivita-img {
+  width: 140px;
+  min-height: 120px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .card-attivita-img {
+    width: 80px;
+    min-height: 80px;
+  }
+}
+
+/* ============================================================
+   CONTATTI — LAYOUT E COMPONENTI
+   ============================================================ */
+
+.contacts-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2xl);
+}
+
+@media (min-width: 768px) {
+  .contacts-layout {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.contact-icon {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* FAQ accordion */
+.faq-item {
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-surface);
+}
+
+.faq-item summary {
+  padding: var(--space-md) var(--space-lg);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+  color: var(--color-text);
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.faq-item summary::-webkit-details-marker { display: none; }
+
+.faq-item summary::after {
+  content: '+';
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--color-primary);
+  flex-shrink: 0;
+  transition: transform var(--transition);
+}
+
+.faq-item[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.faq-item summary:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.faq-item[open] summary {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.faq-item p {
+  padding: var(--space-md) var(--space-lg);
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  max-width: none;
+}
+
+/* ============================================================
+   RESPONSIVE — UTILITY
+   ============================================================ */
+
+@media (max-width: 767px) {
+  .hide-mobile { display: none !important; }
+}
+
+@media (min-width: 768px) {
+  .hide-desktop { display: none !important; }
+}

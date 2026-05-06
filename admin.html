@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — AGGS Como</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://esm.sh">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+
+  <style>
+    .admin-topbar {
+      background: var(--color-primary);
+      color: #fff;
+      height: 3.5rem;
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-lg);
+      gap: var(--space-lg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,.25);
+    }
+    .admin-topbar-title {
+      font-weight: 700;
+      font-size: .9375rem;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      flex: 1;
+    }
+    .admin-tabs-bar {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding-inline: var(--space-lg);
+    }
+    .admin-content {
+      max-width: 1200px;
+      margin-inline: auto;
+      padding: var(--space-xl) var(--space-lg);
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#admin-panel">Vai al pannello admin</a>
+
+  <!-- ══════════════════════════════════════════
+       LOGIN
+  ══════════════════════════════════════════ -->
+  <div id="login-screen"
+       style="min-height:100vh;display:flex;align-items:center;justify-content:center;
+              background:var(--color-primary)">
+    <div style="background:var(--color-surface);border-radius:var(--radius-lg);
+                padding:var(--space-2xl);width:100%;max-width:360px;margin:var(--space-lg)">
+      <div style="text-align:center;margin-bottom:var(--space-xl)">
+        <img src="assets/logo.svg" alt="Logo AGGS Como" width="48" height="48"
+             style="margin-bottom:var(--space-md)" onerror="this.style.display='none'">
+        <h1 style="font-size:1.375rem;color:var(--color-primary);margin-bottom:var(--space-xs)">
+          Admin AGGS Como
+        </h1>
+        <p class="text-sm text-muted">Area riservata ai capi</p>
+      </div>
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <input type="password" id="login-password" class="form-control"
+                 autocomplete="current-password" placeholder="••••••••" required>
+        </div>
+        <div id="login-error" class="alert alert-error hidden" role="alert"
+             style="margin-bottom:var(--space-md)">
+          Password non corretta.
+        </div>
+        <button type="submit" class="btn btn-primary btn-full btn-lg">Accedi</button>
+      </form>
+      <p style="text-align:center;margin-top:var(--space-lg)">
+        <a href="index.html" style="color:rgba(0,57,133,.6);font-size:.875rem">
+          ← Torna al sito
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PANNELLO ADMIN
+  ══════════════════════════════════════════ -->
+  <div id="admin-panel" class="hidden">
+
+    <!-- Top bar -->
+    <div class="admin-topbar">
+      <div class="admin-topbar-title">
+        <img src="assets/logo.svg" alt="" width="26" height="26"
+             onerror="this.style.display='none'">
+        Admin — AGGS Como
+      </div>
+      <a href="index.html"
+         style="color:rgba(255,255,255,.75);font-size:.875rem;text-decoration:none;
+                white-space:nowrap">
+        ← Sito pubblico
+      </a>
+      <button id="btn-logout" class="btn btn-sm"
+              style="background:rgba(255,255,255,.15);color:#fff;
+                     border-color:rgba(255,255,255,.3);white-space:nowrap">
+        Esci
+      </button>
+    </div>
+
+    <!-- Avviso service key mancante -->
+    <div id="warn-service-key" class="hidden"
+         style="background:#fff3cd;color:#856404;border-bottom:1px solid #ffc107;
+                padding:.5rem var(--space-lg);font-size:.875rem;text-align:center">
+      <strong>Attenzione:</strong> <code>SUPABASE_SERVICE_KEY</code> non configurata in
+      <code>config.js</code>. Le operazioni admin (lettura, scrittura attività, iscrizioni)
+      potrebbero non funzionare. Vai su Supabase → Project Settings → API → service_role.
+    </div>
+
+    <!-- Tabs -->
+    <div class="admin-tabs-bar">
+      <div class="admin-tabs" style="max-width:1200px;margin-inline:auto">
+        <button class="admin-tab active" data-tab="attivita">Attività</button>
+        <button class="admin-tab" data-tab="iscrizioni">Iscrizioni</button>
+        <button class="admin-tab" data-tab="avvisi">Avvisi</button>
+      </div>
+    </div>
+
+    <!-- Contenuto -->
+    <div class="admin-content">
+
+      <!-- ── Panel: Attività ── -->
+      <div id="panel-attivita">
+        <div style="display:flex;align-items:center;justify-content:space-between;
+                    flex-wrap:wrap;gap:var(--space-md);margin-bottom:var(--space-xl)">
+          <h2 style="color:var(--color-primary);font-size:1.375rem">Attività</h2>
+          <button id="btn-nuova-attivita" class="btn btn-accent">+ Nuova attività</button>
+        </div>
+        <div id="attivita-list">
+          <div class="loading-overlay">
+            <span class="spinner"></span><span>Caricamento…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Panel: Avvisi ── -->
+      <div id="panel-avvisi" class="hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;
+                    flex-wrap:wrap;gap:var(--space-md);margin-bottom:var(--space-xl)">
+          <h2 style="color:var(--color-primary);font-size:1.375rem">Avvisi</h2>
+          <button id="btn-nuovo-avviso" class="btn btn-accent">+ Nuovo avviso</button>
+        </div>
+        <div id="avvisi-admin-list">
+          <div class="loading-overlay">
+            <span class="spinner"></span><span>Caricamento…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Panel: Iscrizioni ── -->
+      <div id="panel-iscrizioni" class="hidden">
+        <h2 style="color:var(--color-primary);font-size:1.375rem;margin-bottom:var(--space-xl)">
+          Iscrizioni
+        </h2>
+
+        <div class="form-group" style="max-width:480px;margin-bottom:var(--space-xl)">
+          <label class="form-label" for="select-attivita-isc">Seleziona attività</label>
+          <select id="select-attivita-isc" class="form-control">
+            <option value="">Scegli un'attività…</option>
+          </select>
+        </div>
+
+        <div id="iscrizioni-content">
+          <p class="text-muted">Seleziona un'attività per vedere le iscrizioni.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MODAL — NUOVA ATTIVITÀ
+  ══════════════════════════════════════════ -->
+  <div id="modal-attivita" class="modal-backdrop"
+       role="dialog" aria-modal="true" aria-labelledby="modal-att-title">
+    <div class="modal" style="max-width:700px">
+
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-att-title">Nuova attività</h2>
+        <button class="modal-close" id="modal-att-close" aria-label="Chiudi">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="3" x2="13" y2="13"/>
+            <line x1="13" y1="3" x2="3" y2="13"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form id="form-attivita" novalidate>
+
+          <div class="form-group">
+            <label class="form-label" for="att-nome">
+              Nome <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input type="text" id="att-nome" class="form-control" required
+                   placeholder="Es. Uscita al lago di Como">
+            <span class="form-error" id="err-att-nome">Inserisci il nome.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="att-descrizione">Descrizione</label>
+            <textarea id="att-descrizione" class="form-control" rows="3"
+                      placeholder="Descrizione dell'attività…"></textarea>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="att-tipo">
+                Tipo <span class="required" aria-hidden="true">*</span>
+              </label>
+              <select id="att-tipo" class="form-control" required>
+                <option value="">Seleziona…</option>
+                <option value="uscita_giorno">Uscita giorno</option>
+                <option value="campo">Campo</option>
+                <option value="riunione">Riunione</option>
+                <option value="evento">Evento</option>
+              </select>
+              <span class="form-error" id="err-att-tipo">Seleziona il tipo.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="att-quota">Quota (€)</label>
+              <input type="number" id="att-quota" class="form-control"
+                     min="0" step="0.01" placeholder="0">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="att-data-inizio">
+                Data inizio <span class="required" aria-hidden="true">*</span>
+              </label>
+              <input type="date" id="att-data-inizio" class="form-control" required>
+              <span class="form-error" id="err-att-data">Inserisci la data.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="att-data-fine">Data fine</label>
+              <input type="date" id="att-data-fine" class="form-control">
+              <span class="form-hint">Lascia vuoto per attività di un solo giorno.</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="att-immagine">URL immagine</label>
+            <input type="url" id="att-immagine" class="form-control"
+                   placeholder="https://…">
+          </div>
+
+          <div style="display:flex;gap:var(--space-xl);flex-wrap:wrap;
+                      margin-bottom:var(--space-md)">
+            <label class="form-check">
+              <input type="checkbox" id="att-ha-form">
+              <span class="form-check-label">Ha form di iscrizione</span>
+            </label>
+            <label class="form-check">
+              <input type="checkbox" id="att-attiva" checked>
+              <span class="form-check-label">Attiva (visibile sul sito)</span>
+            </label>
+          </div>
+
+          <div class="form-group" id="nota-iscrizioni-group" style="margin-bottom:var(--space-xl)">
+            <label class="form-label" for="att-nota-iscrizioni">
+              Messaggio iscrizioni (opzionale)
+            </label>
+            <input type="text" id="att-nota-iscrizioni" class="form-control"
+                   placeholder="Es. Le iscrizioni apriranno il 15 maggio">
+            <span class="form-hint">
+              Mostrato ai visitatori quando il form non è ancora aperto.
+              Lascia vuoto per non mostrare nulla.
+            </span>
+          </div>
+
+          <!-- ── Documenti scaricabili ── -->
+          <fieldset class="form-section">
+            <legend>Documenti scaricabili</legend>
+            <p class="form-hint" style="margin-bottom:var(--space-md)">
+              Carica PDF che i genitori possono scaricare, compilare e inviare via email alla segreteria (es. scheda medica, modulo consenso).
+            </p>
+
+            <div id="documenti-list" style="margin-bottom:var(--space-md)"></div>
+
+            <div id="upload-doc-progress" class="hidden"
+                 style="display:flex;align-items:center;gap:var(--space-sm);
+                        font-size:.875rem;color:var(--color-text-muted);margin-bottom:var(--space-md)">
+              <span class="spinner" style="width:1rem;height:1rem;border-width:2px"></span>
+              <span>Caricamento in corso…</span>
+            </div>
+
+            <input type="file" id="input-pdf" accept=".pdf,application/pdf"
+                   multiple class="hidden" aria-label="Scegli file PDF">
+            <button type="button" id="btn-carica-pdf"
+                    class="btn btn-outline btn-sm">+ Carica PDF</button>
+          </fieldset>
+
+          <!-- ── Costruttore campi extra ── -->
+          <fieldset class="form-section">
+            <legend>Campi extra del form</legend>
+            <p class="form-hint" style="margin-bottom:var(--space-md)">
+              Aggiungi domande personalizzate che appariranno nel form di iscrizione.
+            </p>
+
+            <div id="campi-extra-list" style="margin-bottom:var(--space-md)"></div>
+
+            <!-- Form aggiunta campo (nascosto di default) -->
+            <div id="aggiungi-campo-box" class="hidden"
+                 style="background:var(--color-bg);border:1.5px dashed var(--color-border);
+                        border-radius:var(--radius-md);padding:var(--space-md);
+                        margin-bottom:var(--space-md)">
+              <p style="font-weight:600;font-size:.875rem;color:var(--color-primary);
+                         margin-bottom:var(--space-md)">Nuovo campo</p>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="campo-label" style="font-size:.875rem">
+                    Etichetta <span class="required" aria-hidden="true">*</span>
+                  </label>
+                  <input type="text" id="campo-label" class="form-control"
+                         placeholder="Es. Taglia maglietta">
+                  <span class="form-error" id="err-campo-label">
+                    Inserisci un'etichetta.
+                  </span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="campo-tipo" style="font-size:.875rem">
+                    Tipo
+                  </label>
+                  <select id="campo-tipo" class="form-control">
+                    <option value="testo_breve">Testo breve</option>
+                    <option value="numero">Numero</option>
+                    <option value="data">Data</option>
+                    <option value="checkbox">Sì / No (checkbox)</option>
+                    <option value="select">Scelta multipla</option>
+                  </select>
+                </div>
+              </div>
+              <div id="campo-opzioni-group" class="form-group hidden">
+                <label class="form-label" for="campo-opzioni" style="font-size:.875rem">
+                  Opzioni (una per riga)
+                </label>
+                <textarea id="campo-opzioni" class="form-control" rows="3"
+                          placeholder="S&#10;M&#10;L&#10;XL"></textarea>
+              </div>
+              <label class="form-check" style="margin-bottom:var(--space-md)">
+                <input type="checkbox" id="campo-obbligatorio">
+                <span class="form-check-label" style="font-size:.875rem">Obbligatorio</span>
+              </label>
+              <div style="display:flex;gap:var(--space-sm)">
+                <button type="button" id="btn-conferma-campo"
+                        class="btn btn-primary btn-sm">Aggiungi</button>
+                <button type="button" id="btn-annulla-campo"
+                        class="btn btn-ghost btn-sm">Annulla</button>
+              </div>
+            </div>
+
+            <button type="button" id="btn-aggiungi-campo"
+                    class="btn btn-outline btn-sm">+ Aggiungi campo</button>
+          </fieldset>
+
+          <div id="form-att-error" class="alert alert-error hidden" role="alert"></div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="modal-att-cancel" class="btn btn-ghost">Annulla</button>
+        <button type="button" id="modal-att-save" class="btn btn-accent">
+          Salva attività
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MODAL — AVVISO
+  ══════════════════════════════════════════ -->
+  <div id="modal-avviso" class="modal-backdrop"
+       role="dialog" aria-modal="true" aria-labelledby="modal-avviso-title">
+    <div class="modal" style="max-width:560px">
+
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-avviso-title">Nuovo avviso</h2>
+        <button class="modal-close" id="modal-avviso-close" aria-label="Chiudi">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="3" x2="13" y2="13"/>
+            <line x1="13" y1="3" x2="3" y2="13"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form id="form-avviso" novalidate>
+
+          <div class="form-group">
+            <label class="form-label" for="avv-titolo">
+              Titolo <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input type="text" id="avv-titolo" class="form-control" required
+                   placeholder="Es. Riunione genitori — venerdì 9 maggio">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="avv-testo">
+              Testo <span class="required" aria-hidden="true">*</span>
+            </label>
+            <textarea id="avv-testo" class="form-control" rows="4"
+                      placeholder="Testo dell'avviso…"></textarea>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="avv-tipo">Tipo</label>
+              <select id="avv-tipo" class="form-control">
+                <option value="info">Info</option>
+                <option value="importante">Importante</option>
+                <option value="urgente">Urgente</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="avv-scadenza">Scadenza</label>
+              <input type="date" id="avv-scadenza" class="form-control">
+              <span class="form-hint">Lascia vuoto per nessuna scadenza.</span>
+            </div>
+          </div>
+
+          <label class="form-check" style="margin-bottom:var(--space-md)">
+            <input type="checkbox" id="avv-attivo" checked>
+            <span class="form-check-label">Attivo (visibile sul sito)</span>
+          </label>
+
+          <div id="form-avviso-error" class="alert alert-error hidden" role="alert"></div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="modal-avviso-delete"
+                class="btn btn-ghost hidden"
+                style="color:var(--color-error);margin-right:auto">
+          Elimina avviso
+        </button>
+        <button type="button" id="modal-avviso-cancel" class="btn btn-ghost">Annulla</button>
+        <button type="button" id="modal-avviso-save" class="btn btn-accent">Salva avviso</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

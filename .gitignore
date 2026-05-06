@@ -1,0 +1,16 @@
+# Supabase CLI — dati locali sensibili (project ref, org ID)
+supabase/.temp/
+
+# Claude Code — impostazioni locali
+.claude/settings.local.json
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo

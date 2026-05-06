@@ -116,7 +116,7 @@ function renderFooter(el) {
     <div>
       <p class="footer-heading">Contatti</p>
       <ul class="footer-links">
-        <li><a href="mailto:info@aggscomo.it">info@aggscomo.it</a></li>
+        <li><a href="mailto:aggscomo@gmail.com">aggscomo@gmail.com</a></li>
         <li><a href="contatti.html">Iscriviti alla newsletter</a></li>
       </ul>
     </div>

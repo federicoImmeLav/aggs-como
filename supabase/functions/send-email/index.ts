@@ -109,7 +109,7 @@ function sociEmail(record: Record<string, unknown>): { subject: string; html: st
         <tr>
           <td style="padding:24px 40px;text-align:center;">
             <p style="margin:0;font-size:13px;color:#6b7280;">
-              AGGS Como — <a href="mailto:info@aggscomo.it" style="color:#003985;text-decoration:none;">info@aggscomo.it</a>
+              AGGS Como — <a href="mailto:aggscomo@gmail.com" style="color:#003985;text-decoration:none;">aggscomo@gmail.com</a>
             </p>
             <p style="margin:8px 0 0;font-size:12px;color:#9ca3af;">
               Hai ricevuto questa email perché hai effettuato un'iscrizione tramite il sito AGGS Como.
@@ -137,7 +137,7 @@ I capi dell'unità ti contatteranno presto con tutte le informazioni sulle pross
 Buona caccia e buona strada!
 
 AGGS Como
-info@aggscomo.it`;
+aggscomo@gmail.com`;
 
   return { subject, html, text };
 }
@@ -232,7 +232,7 @@ function attivitaEmail(
               L'iscrizione è attualmente <strong>in attesa di conferma</strong>. Riceverai una comunicazione dai capi appena verrà processata.
             </p>
             <p style="margin:0;font-size:16px;color:#1a1a2e;line-height:1.6;">
-              Per qualsiasi domanda puoi scriverci a <a href="mailto:info@aggscomo.it" style="color:#003985;">info@aggscomo.it</a>.
+              Per qualsiasi domanda puoi scriverci a <a href="mailto:aggscomo@gmail.com" style="color:#003985;">aggscomo@gmail.com</a>.
             </p>
           </td>
         </tr>
@@ -248,7 +248,7 @@ function attivitaEmail(
         <tr>
           <td style="padding:24px 40px;text-align:center;">
             <p style="margin:0;font-size:13px;color:#6b7280;">
-              AGGS Como — <a href="mailto:info@aggscomo.it" style="color:#003985;text-decoration:none;">info@aggscomo.it</a>
+              AGGS Como — <a href="mailto:aggscomo@gmail.com" style="color:#003985;text-decoration:none;">aggscomo@gmail.com</a>
             </p>
             <p style="margin:8px 0 0;font-size:12px;color:#9ca3af;">
               Hai ricevuto questa email perché hai effettuato un'iscrizione tramite il sito AGGS Como.
@@ -273,10 +273,10 @@ Stato: In attesa di conferma
 
 L'iscrizione è attualmente in attesa di conferma. Riceverai una comunicazione dai capi appena verrà processata.
 
-Per qualsiasi domanda puoi scriverci a info@aggscomo.it.
+Per qualsiasi domanda puoi scriverci a aggscomo@gmail.com.
 
 AGGS Como
-info@aggscomo.it`;
+aggscomo@gmail.com`;
 
   return { subject, html, text };
 }

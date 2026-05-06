@@ -30,6 +30,8 @@ function validaForm() {
     valido = false;
   }
 
+  if (!document.getElementById('nome')?.value.trim())          segnaErrore('nome');
+  if (!document.getElementById('cognome')?.value.trim())       segnaErrore('cognome');
   if (!document.getElementById('email')?.value.includes('@'))  segnaErrore('email');
   if (!document.getElementById('consenso_privacy')?.checked)   segnaErrore('consenso_privacy');
 
@@ -54,12 +56,11 @@ async function inviaIscrizione() {
   btn.innerHTML = '<span class="spinner"></span> Invio in corso…';
   errBox.classList.add('hidden');
 
-  const tipo = document.getElementById('tipo').value;
-
   const payload = {
     email:            document.getElementById('email').value.trim().toLowerCase(),
     nome:             document.getElementById('nome').value.trim() || null,
-    tipo:             tipo || null,
+    cognome:          document.getElementById('cognome').value.trim() || null,
+    nome_ragazzo:     document.getElementById('nome_ragazzo').value.trim() || null,
     consenso_privacy: true,
     attivo:           true,
   };
@@ -74,7 +75,7 @@ async function inviaIscrizione() {
     if (error.code === '23505') {
       errBox.textContent = 'Questa email è già iscritta alla newsletter.';
     } else {
-      errBox.textContent = `Si è verificato un errore: ${error.message}. Riprova o scrivici a info@aggscomo.it.`;
+      errBox.textContent = `Si è verificato un errore: ${error.message}. Riprova o scrivici a aggscomo@gmail.com.`;
     }
     errBox.classList.remove('hidden');
     return;

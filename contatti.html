@@ -57,8 +57,8 @@
                   </div>
                   <div>
                     <p style="font-weight:600;margin-bottom:2px">Email</p>
-                    <a href="mailto:info@aggscomo.it" style="color:var(--color-primary)">
-                      info@aggscomo.it
+                    <a href="mailto:aggscomo@gmail.com" style="color:var(--color-primary)">
+                      aggscomo@gmail.com
                     </a>
                     <p class="text-sm text-muted" style="margin-top:4px">
                       Rispondiamo entro 2–3 giorni lavorativi.
@@ -78,34 +78,13 @@
                   </div>
                   <div>
                     <p style="font-weight:600;margin-bottom:2px">Sede</p>
-                    <p>Como (CO)</p>
-                    <p class="text-sm text-muted" style="margin-top:4px">
-                      Le attività si svolgono in varie location del territorio comasco.
-                      Contattaci per dettagli sui luoghi di ritrovo.
-                    </p>
+                    <p>Oratorio della Parrocchia Santi Pietro e Paolo</p>
+                    <p>Bulgorello (CO)</p>
                   </div>
                 </div>
               </div>
 
-              <div class="card card-body">
-                <div style="display:flex;gap:var(--space-md);align-items:flex-start">
-                  <div class="contact-icon" aria-hidden="true">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="12" cy="12" r="10"/>
-                      <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <p style="font-weight:600;margin-bottom:2px">Disponibilità</p>
-                    <p>Fine settimana e serate infrasettimanali</p>
-                    <p class="text-sm text-muted" style="margin-top:4px">
-                      I nostri capi sono volontari. Per urgenze
-                      usa l'email o scrivi direttamente al responsabile di unità.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              
 
             </div>
 
@@ -146,9 +125,23 @@
               <div id="form-fields">
 
                 <div class="form-group">
-                  <label class="form-label" for="nome">Nome</label>
+                  <label class="form-label" for="nome">Nome <span class="required" aria-hidden="true">*</span></label>
                   <input type="text" id="nome" name="nome" class="form-control"
-                         autocomplete="given-name" placeholder="Mario">
+                         autocomplete="given-name" required placeholder="Mario">
+                  <span class="form-error" id="err-nome">Inserisci il tuo nome.</span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="cognome">Cognome <span class="required" aria-hidden="true">*</span></label>
+                  <input type="text" id="cognome" name="cognome" class="form-control"
+                         autocomplete="family-name" required placeholder="Rossi">
+                  <span class="form-error" id="err-cognome">Inserisci il tuo cognome.</span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="nome_ragazzo">Nome e cognome del ragazzo/a</label>
+                  <input type="text" id="nome_ragazzo" name="nome_ragazzo" class="form-control"
+                         placeholder="Luca Rossi">
                 </div>
 
                 <div class="form-group">
@@ -158,16 +151,6 @@
                   <input type="email" id="email" name="email" class="form-control"
                          autocomplete="email" required placeholder="mario.rossi@email.it">
                   <span class="form-error" id="err-email">Inserisci un indirizzo email valido.</span>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label" for="tipo">Chi sei?</label>
-                  <select id="tipo" name="tipo" class="form-control">
-                    <option value="">Seleziona (opzionale)…</option>
-                    <option value="genitore">Genitore interessato</option>
-                    <option value="interessato">Curioso / interessato</option>
-                    <option value="ex-scout">Ex scout</option>
-                  </select>
                 </div>
 
                 <div class="form-group">
@@ -193,7 +176,7 @@
 
                 <p class="text-sm text-muted" style="margin-top:var(--space-md);text-align:center">
                   Puoi disiscriverti in qualsiasi momento scrivendo a
-                  <a href="mailto:info@aggscomo.it">info@aggscomo.it</a>.
+                  <a href="mailto:aggscomo@gmail.com">aggscomo@gmail.com</a>.
                 </p>
 
               </div>
@@ -235,7 +218,7 @@
 
           <details class="faq-item">
             <summary>Come posso diventare capo scout?</summary>
-            <p>Se sei maggiorenne e desideri diventare capo volontario, scrivici a <a href="mailto:info@aggscomo.it">info@aggscomo.it</a>. Ti illustreremo il percorso di formazione previsto dal metodo scout.</p>
+            <p>Se sei maggiorenne e desideri diventare capo volontario, scrivici a <a href="mailto:aggscomo@gmail.com">aggscomo@gmail.com</a>. Ti illustreremo il percorso di formazione previsto dal metodo scout.</p>
           </details>
 
         </div>

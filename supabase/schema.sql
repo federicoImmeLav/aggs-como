@@ -78,7 +78,8 @@ create table if not exists contatti (
   id               uuid primary key default gen_random_uuid(),
   email            text unique not null,
   nome             text,
-  tipo             text check (tipo in ('genitore','interessato','ex-scout')),
+  cognome          text,
+  nome_ragazzo     text,
   consenso_privacy boolean not null default false,
   attivo           boolean default true,
   data_iscrizione  timestamptz default now()

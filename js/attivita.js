@@ -92,7 +92,9 @@ function renderPagina(a) {
     : '';
 
   const formHTML = a.ha_form_iscrizione
-    ? buildFormHTML(showNoteMediche, campiExtra)
+    ? (a.tipo_modulo === 'campo_minori'
+        ? buildFormCampoMinoriHTML()
+        : buildFormHTML(showNoteMediche, campiExtra))
     : (a.nota_iscrizioni
         ? `<div class="alert alert-info"><span>${a.nota_iscrizioni}</span></div>`
         : '');
@@ -140,7 +142,7 @@ function renderPagina(a) {
                 <p class="text-xs text-muted font-semibold" style="text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Quota</p>
                 <div>${quotaHTML}</div>
               </div>` : ''}
-              ${unitaHTML ? `<div><p class="text-xs text-muted font-semibold" style="text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Unità</p>${unitaHTML}</div>` : ''}
+              ${unitaHTML ? `<div><p class="text-xs text-muted font-semibold" style="text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Reparto</p>${unitaHTML}</div>` : ''}
             </div>
 
             <!-- Descrizione -->
@@ -169,7 +171,11 @@ function renderPagina(a) {
   `;
 
   if (a.ha_form_iscrizione) {
-    initForm(a, showNoteMediche, campiExtra);
+    if (a.tipo_modulo === 'campo_minori') {
+      initFormCampoMinori(a);
+    } else {
+      initForm(a, showNoteMediche, campiExtra);
+    }
   }
 }
 
@@ -473,6 +479,291 @@ async function inviaIscrizione(form, attivita, campiExtra) {
   }
 
   // Successo
+  document.getElementById('form-fields').classList.add('hidden');
+  document.getElementById('form-success').classList.remove('hidden');
+  window.scrollTo({ top: document.getElementById('form-iscrizione').offsetTop - 80, behavior: 'smooth' });
+}
+
+// ──────────────────────────────────────────────
+// MODULO CAMPO MINORI
+// ──────────────────────────────────────────────
+
+function buildFormCampoMinoriHTML() {
+  return `
+<form id="form-iscrizione" class="form-page" novalidate>
+  <div id="form-success" class="alert alert-success hidden" role="alert">
+    <span>
+      <strong>Iscrizione inviata!</strong> Riceverai una email di conferma a breve.
+      Torna al <a href="calendario.html">calendario</a> per scoprire altre attività.
+    </span>
+  </div>
+
+  <div id="form-fields">
+
+    <fieldset class="form-section">
+      <legend>Dati del ragazzo / della ragazza</legend>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="nome">
+            Nome <span class="required" aria-hidden="true">*</span>
+          </label>
+          <input type="text" id="nome" name="nome" class="form-control"
+                 autocomplete="given-name" required placeholder="Mario">
+          <span class="form-error" id="err-nome">Inserisci il nome.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cognome">
+            Cognome <span class="required" aria-hidden="true">*</span>
+          </label>
+          <input type="text" id="cognome" name="cognome" class="form-control"
+                 autocomplete="family-name" required placeholder="Rossi">
+          <span class="form-error" id="err-cognome">Inserisci il cognome.</span>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="data_nascita">
+            Data di nascita <span class="required" aria-hidden="true">*</span>
+          </label>
+          <input type="date" id="data_nascita" name="data_nascita" class="form-control" required>
+          <span class="form-error" id="err-data_nascita">Inserisci la data di nascita.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="unita">
+            Reparto <span class="required" aria-hidden="true">*</span>
+          </label>
+          <select id="unita" name="unita" class="form-control" required>
+            <option value="">Seleziona…</option>
+            <option value="coccinelle">Coccinelle</option>
+            <option value="lupetti">Lupetti</option>
+            <option value="guide">Guide</option>
+            <option value="scout">Scout</option>
+          </select>
+          <span class="form-error" id="err-unita">Seleziona il reparto.</span>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="form-section">
+      <legend>Dati del genitore / tutore</legend>
+
+      <div class="form-group">
+        <label class="form-label" for="nome_genitore">
+          Nome e cognome del genitore <span class="required" aria-hidden="true">*</span>
+        </label>
+        <input type="text" id="nome_genitore" name="nome_genitore" class="form-control"
+               autocomplete="name" required placeholder="Anna Rossi">
+        <span class="form-error" id="err-nome_genitore">Inserisci il nome e cognome del genitore.</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="indirizzo_genitore">
+          Indirizzo (reperibilità durante il campo) <span class="required" aria-hidden="true">*</span>
+        </label>
+        <input type="text" id="indirizzo_genitore" name="indirizzo_genitore" class="form-control"
+               autocomplete="street-address" required placeholder="Via Roma 1, Como">
+        <span class="form-error" id="err-indirizzo_genitore">Inserisci l'indirizzo di reperibilità.</span>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="telefono">
+            Telefono 1 <span class="required" aria-hidden="true">*</span>
+          </label>
+          <input type="tel" id="telefono" name="telefono" class="form-control"
+                 autocomplete="tel" required placeholder="+39 333 1234567">
+          <span class="form-error" id="err-telefono">Inserisci un numero di telefono.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="telefono_2">Telefono 2</label>
+          <input type="tel" id="telefono_2" name="telefono_2" class="form-control"
+                 autocomplete="tel" placeholder="+39 333 7654321">
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="telefono_3">Telefono 3</label>
+          <input type="tel" id="telefono_3" name="telefono_3" class="form-control"
+                 autocomplete="tel" placeholder="+39 333 0000000">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email_contatto">
+            Email del genitore <span class="required" aria-hidden="true">*</span>
+          </label>
+          <input type="email" id="email_contatto" name="email_contatto" class="form-control"
+                 autocomplete="email" required placeholder="anna.rossi@email.it">
+          <span class="form-error" id="err-email_contatto">Inserisci un indirizzo email valido.</span>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="form-section">
+      <legend>Dichiarazioni</legend>
+
+      <div class="form-group">
+        <label class="form-check">
+          <input type="checkbox" id="consenso_autorizzazione" name="consenso_autorizzazione" required>
+          <span class="form-check-label">
+            Il sottoscritto <strong>AUTORIZZA</strong> il/la proprio/a figlio/a a partecipare
+            al campo estivo dell'Associazione AGGS Como.
+            <span class="required" aria-hidden="true">*</span>
+          </span>
+        </label>
+        <span class="form-error" id="err-consenso_autorizzazione">Questa dichiarazione è obbligatoria.</span>
+      </div>
+
+      <div class="form-group" style="margin-top:var(--space-md)">
+        <label class="form-check">
+          <input type="checkbox" id="consenso_esonero" name="consenso_esonero" required>
+          <span class="form-check-label">
+            Il sottoscritto <strong>ESONERA</strong> i capi e gli incaricati da ogni responsabilità
+            civile o penale derivante da incidenti non dipendenti dalla loro incuria.
+            <span class="required" aria-hidden="true">*</span>
+          </span>
+        </label>
+        <span class="form-error" id="err-consenso_esonero">Questa dichiarazione è obbligatoria.</span>
+      </div>
+
+      <div class="form-group" style="margin-top:var(--space-md)">
+        <label class="form-check">
+          <input type="checkbox" id="presa_visione_documenti" name="presa_visione_documenti" required>
+          <span class="form-check-label">
+            Sono consapevole che l'iscrizione sarà ritenuta valida solo dopo l'invio via email
+            della copia del documento d'identità del genitore e del ragazzo/a, allegata al modulo
+            di iscrizione e alla scheda medica debitamente compilata.
+            <span class="required" aria-hidden="true">*</span>
+          </span>
+        </label>
+        <span class="form-error" id="err-presa_visione_documenti">Questa dichiarazione è obbligatoria.</span>
+      </div>
+    </fieldset>
+
+    <div style="background:rgba(0,57,133,.07);border-left:4px solid var(--color-primary);
+                border-radius:var(--radius-md);padding:var(--space-lg);margin-bottom:var(--space-lg)">
+      <p style="font-weight:600;color:var(--color-primary);margin-bottom:var(--space-sm)">
+        Informazioni sul pagamento
+      </p>
+      <p style="font-size:.875rem;line-height:1.7;margin:0">
+        La quota sarà comunicata nelle prossime comunicazioni. Il pagamento potrà essere
+        effettuato solo tramite bonifico intestato a
+        <strong>ASSOCIAZIONE GRUPPI GUIDE E SCOUT COMO</strong> —
+        Banca: Credit Agricole —
+        IBAN: <strong>IT05B0623010996000046690131</strong> —
+        Causale: <em>Nome e cognome ragazzo – Partecipazione attività scoutistica</em>
+      </p>
+    </div>
+
+    <fieldset class="form-section">
+      <legend>Consenso privacy</legend>
+      <div class="form-group">
+        <label class="form-check">
+          <input type="checkbox" id="consenso_privacy" name="consenso_privacy" required>
+          <span class="form-check-label">
+            Ho letto e accetto la <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.
+            Acconsento al trattamento dei dati personali per la gestione dell'iscrizione.
+            <span class="required" aria-hidden="true">*</span>
+          </span>
+        </label>
+        <span class="form-error" id="err-consenso_privacy">Devi accettare la privacy policy per procedere.</span>
+      </div>
+    </fieldset>
+
+    <div id="form-error-generale" class="alert alert-error hidden" role="alert"></div>
+
+    <button type="submit" class="btn btn-accent btn-lg btn-full" id="btn-submit">
+      Invia iscrizione
+    </button>
+
+  </div>
+</form>
+  `.trim();
+}
+
+function initFormCampoMinori(attivita) {
+  const form = document.getElementById('form-iscrizione');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validaFormCampoMinori(form)) return;
+    await inviaIscrizioneCampoMinori(form, attivita);
+  });
+}
+
+function validaFormCampoMinori(form) {
+  let valido = true;
+  form.querySelectorAll('.form-group.has-error').forEach(g => g.classList.remove('has-error'));
+
+  function segnaErrore(id) {
+    const el = document.getElementById(id);
+    if (el) el.closest('.form-group')?.classList.add('has-error');
+    valido = false;
+  }
+
+  ['nome', 'cognome', 'data_nascita', 'unita', 'nome_genitore',
+   'indirizzo_genitore', 'telefono'].forEach(id => {
+    if (!form.querySelector(`#${id}`)?.value.trim()) segnaErrore(id);
+  });
+
+  const email = form.querySelector('#email_contatto');
+  if (!email?.value.trim()) {
+    segnaErrore('email_contatto');
+  } else if (!email.value.includes('@')) {
+    segnaErrore('email_contatto');
+  }
+
+  ['consenso_autorizzazione', 'consenso_esonero',
+   'presa_visione_documenti', 'consenso_privacy'].forEach(id => {
+    if (!form.querySelector(`#${id}`)?.checked) segnaErrore(id);
+  });
+
+  if (!valido) {
+    form.querySelector('.form-group.has-error')
+        ?.querySelector('input, select, textarea')
+        ?.focus();
+  }
+  return valido;
+}
+
+async function inviaIscrizioneCampoMinori(form, attivita) {
+  const btn    = document.getElementById('btn-submit');
+  const errBox = document.getElementById('form-error-generale');
+
+  btn.disabled  = true;
+  btn.innerHTML = `<span class="spinner"></span> Invio in corso…`;
+  errBox.classList.add('hidden');
+
+  const payload = {
+    attivita_id:             attivita.id,
+    nome:                    form.querySelector('#nome').value.trim(),
+    cognome:                 form.querySelector('#cognome').value.trim(),
+    data_nascita:            form.querySelector('#data_nascita').value,
+    email_contatto:          form.querySelector('#email_contatto').value.trim(),
+    telefono:                form.querySelector('#telefono').value.trim(),
+    nome_genitore:           form.querySelector('#nome_genitore').value.trim(),
+    indirizzo_genitore:      form.querySelector('#indirizzo_genitore').value.trim(),
+    telefono_2:              form.querySelector('#telefono_2')?.value.trim() || null,
+    telefono_3:              form.querySelector('#telefono_3')?.value.trim() || null,
+    consenso_autorizzazione: true,
+    consenso_esonero:        true,
+    presa_visione_documenti: true,
+    consenso_privacy:        true,
+    risposte_extra: {
+      unita: form.querySelector('#unita').value,
+    },
+  };
+
+  const { error } = await supabase.from('iscrizioni_attivita').insert(payload);
+
+  if (error) {
+    btn.disabled  = false;
+    btn.innerHTML = 'Invia iscrizione';
+    errBox.textContent = `Si è verificato un errore: ${error.message}. Riprova o contattaci direttamente.`;
+    errBox.classList.remove('hidden');
+    return;
+  }
+
   document.getElementById('form-fields').classList.add('hidden');
   document.getElementById('form-success').classList.remove('hidden');
   window.scrollTo({ top: document.getElementById('form-iscrizione').offsetTop - 80, behavior: 'smooth' });

@@ -408,6 +408,7 @@ async function apriModalModifica(id) {
   document.getElementById('att-ha-form').checked          = !!data.ha_form_iscrizione;
   document.getElementById('att-attiva').checked            = !!data.attiva;
   document.getElementById('att-nota-iscrizioni').value     = data.nota_iscrizioni || '';
+  document.getElementById('att-tipo-modulo').value         = data.tipo_modulo || '';
   syncNotaIscrizioni();
 
   campiExtra = Array.isArray(data.campi_extra) ? [...data.campi_extra] : [];
@@ -565,6 +566,7 @@ async function salvaAttivita() {
     nome,
     descrizione:        document.getElementById('att-descrizione').value.trim() || null,
     tipo,
+    tipo_modulo:        document.getElementById('att-tipo-modulo').value || null,
     data_inizio:        dataInizio,
     data_fine:          document.getElementById('att-data-fine').value || null,
     quota:              parseFloat(document.getElementById('att-quota').value) || 0,

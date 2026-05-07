@@ -128,7 +128,7 @@ function renderFooter(el) {
 
   <div class="footer-bottom">
     <span>&copy; ${year} AGGS Como — Tutti i diritti riservati</span>
-    <a href="privacy.html">Privacy Policy</a>
+    <a href="assets/PRIVACY.pdf" target="_blank" rel="noopener">Privacy Policy</a>
   </div>
 </div>
   `.trim();

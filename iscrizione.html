@@ -64,14 +64,6 @@
 
               <div class="form-grid-2">
                 <div class="form-group">
-                  <label class="form-label" for="nome">
-                    Nome <span class="required" aria-hidden="true">*</span>
-                  </label>
-                  <input type="text" id="nome" name="nome" class="form-control"
-                         autocomplete="given-name" required placeholder="Mario">
-                  <span class="form-error" id="err-nome">Inserisci il nome.</span>
-                </div>
-                <div class="form-group">
                   <label class="form-label" for="cognome">
                     Cognome <span class="required" aria-hidden="true">*</span>
                   </label>
@@ -79,25 +71,46 @@
                          autocomplete="family-name" required placeholder="Rossi">
                   <span class="form-error" id="err-cognome">Inserisci il cognome.</span>
                 </div>
+                <div class="form-group">
+                  <label class="form-label" for="nome">
+                    Nome <span class="required" aria-hidden="true">*</span>
+                  </label>
+                  <input type="text" id="nome" name="nome" class="form-control"
+                         autocomplete="given-name" required placeholder="Mario">
+                  <span class="form-error" id="err-nome">Inserisci il nome.</span>
+                </div>
               </div>
 
               <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="luogo_nascita">
+                    Luogo di nascita <span class="required" aria-hidden="true">*</span>
+                  </label>
+                  <input type="text" id="luogo_nascita" name="luogo_nascita" class="form-control"
+                         required placeholder="Como">
+                  <span class="form-error" id="err-luogo_nascita">Inserisci il luogo di nascita.</span>
+                </div>
                 <div class="form-group">
                   <label class="form-label" for="data_nascita">
                     Data di nascita <span class="required" aria-hidden="true">*</span>
                   </label>
                   <input type="date" id="data_nascita" name="data_nascita" class="form-control"
                          required autocomplete="bday">
-                  <span class="form-hint">
-                    Determina se è necessario il consenso del genitore e l'unità consigliata.
-                  </span>
                   <span class="form-error" id="err-data_nascita">Inserisci la data di nascita.</span>
                 </div>
+              </div>
+
+              <div class="form-grid-2">
                 <div class="form-group">
                   <label class="form-label" for="codice_fiscale">Codice fiscale</label>
                   <input type="text" id="codice_fiscale" name="codice_fiscale" class="form-control"
                          autocomplete="off" placeholder="RSSMRO80A01H501U"
                          maxlength="16" style="text-transform:uppercase">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="classe_frequentata">Classe frequentata</label>
+                  <input type="text" id="classe_frequentata" name="classe_frequentata"
+                         class="form-control" placeholder="3ª media">
                 </div>
               </div>
 
@@ -108,10 +121,11 @@
                   </label>
                   <select id="unita" name="unita" class="form-control" required>
                     <option value="">Seleziona unità…</option>
-                    <option value="lupetti">Lupetti (8–11 anni)</option>
-                    <option value="coccinelle">Coccinelle (8–11 anni)</option>
-                    <option value="scout">Scout (11–16 anni)</option>
-                    <option value="guide">Guide (11–16 anni)</option>
+                    <option value="coccinelle">Cerchio coccinelle</option>
+                    <option value="lupetti">Branco lupetti</option>
+                    <option value="guide">Reparto guide</option>
+                    <option value="scout">Reparto scout</option>
+                    <option value="clan">Cambusa</option>
                   </select>
                   <span class="form-error" id="err-unita">Seleziona l'unità di appartenenza.</span>
                 </div>
@@ -119,49 +133,16 @@
                   <label class="form-label" for="anno_associativo">
                     Anno associativo <span class="required" aria-hidden="true">*</span>
                   </label>
-                  <input type="text" id="anno_associativo" name="anno_associativo"
-                         class="form-control" required readonly
-                         aria-describedby="hint-anno">
-                  <span class="form-hint" id="hint-anno">Impostato automaticamente.</span>
+                  <select id="anno_associativo" name="anno_associativo" class="form-control" required>
+                    <!-- popolato da JS -->
+                  </select>
                 </div>
               </div>
             </fieldset>
 
-            <!-- CONTATTI -->
-            <fieldset class="form-section">
-              <legend>Contatti</legend>
-              <p class="form-hint" id="hint-contatti" style="margin-bottom:var(--space-md)">
-                Email e telefono del ragazzo/a (se maggiorenne) o del genitore/tutore (se minorenne).
-              </p>
-
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label" for="email">
-                    Email <span class="required" aria-hidden="true">*</span>
-                  </label>
-                  <input type="email" id="email" name="email" class="form-control"
-                         autocomplete="email" required placeholder="mario.rossi@email.it">
-                  <span class="form-error" id="err-email">Inserisci un indirizzo email valido.</span>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="telefono">Telefono</label>
-                  <input type="tel" id="telefono" name="telefono" class="form-control"
-                         autocomplete="tel" placeholder="+39 333 1234567">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="telefono_emergenza">Telefono di emergenza</label>
-                <input type="tel" id="telefono_emergenza" name="telefono_emergenza"
-                       class="form-control" autocomplete="tel"
-                       placeholder="+39 333 7654321">
-                <span class="form-hint">Un numero sempre raggiungibile durante le attività.</span>
-              </div>
-            </fieldset>
-
-            <!-- DATI GENITORE (nascosto, visibile solo per minorenni) -->
+            <!-- DATI GENITORE (solo minorenni) -->
             <fieldset class="form-section hidden" id="sezione-genitore" aria-hidden="true">
-              <legend>Dati del genitore / tutore legale</legend>
+              <legend>Il sottoscritto — Genitore / tutore legale</legend>
               <p class="form-hint" style="margin-bottom:var(--space-md)">
                 Il partecipante è minorenne: compila i dati del genitore o tutore legale.
               </p>
@@ -169,7 +150,7 @@
               <div class="form-grid-2">
                 <div class="form-group">
                   <label class="form-label" for="nome_genitore">
-                    Nome del genitore <span class="required" aria-hidden="true">*</span>
+                    Nome <span class="required" aria-hidden="true">*</span>
                   </label>
                   <input type="text" id="nome_genitore" name="nome_genitore"
                          class="form-control" autocomplete="given-name" placeholder="Anna">
@@ -177,12 +158,76 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="cognome_genitore">
-                    Cognome del genitore <span class="required" aria-hidden="true">*</span>
+                    Cognome <span class="required" aria-hidden="true">*</span>
                   </label>
                   <input type="text" id="cognome_genitore" name="cognome_genitore"
                          class="form-control" autocomplete="family-name" placeholder="Rossi">
                   <span class="form-error" id="err-cognome_genitore">Inserisci il cognome del genitore.</span>
                 </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="indirizzo_citta">
+                    Residente a (città) <span class="required" aria-hidden="true">*</span>
+                  </label>
+                  <input type="text" id="indirizzo_citta" name="indirizzo_citta"
+                         class="form-control" autocomplete="address-level2" placeholder="Como">
+                  <span class="form-error" id="err-indirizzo_citta">Inserisci la città di residenza.</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="indirizzo_cap">
+                    CAP <span class="required" aria-hidden="true">*</span>
+                  </label>
+                  <input type="text" id="indirizzo_cap" name="indirizzo_cap"
+                         class="form-control" autocomplete="postal-code"
+                         placeholder="22100" maxlength="5">
+                  <span class="form-error" id="err-indirizzo_cap">Inserisci il CAP.</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="indirizzo_via">
+                  Via / Piazza e n. civico <span class="required" aria-hidden="true">*</span>
+                </label>
+                <input type="text" id="indirizzo_via" name="indirizzo_via"
+                       class="form-control" autocomplete="street-address" placeholder="Via Roma 1">
+                <span class="form-error" id="err-indirizzo_via">Inserisci l'indirizzo.</span>
+              </div>
+            </fieldset>
+
+            <!-- CONTATTI -->
+            <fieldset class="form-section" id="sezione-contatti">
+              <legend>Contatti</legend>
+              <p class="form-hint" id="hint-contatti" style="margin-bottom:var(--space-md)">
+                Email e telefono del ragazzo/a (se maggiorenne) o del genitore/tutore (se minorenne).
+              </p>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="telefono">
+                    <span id="label-telefono">Telefono</span>
+                  </label>
+                  <input type="tel" id="telefono" name="telefono" class="form-control"
+                         autocomplete="tel" placeholder="+39 031 123456">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="email">
+                    E-mail <span class="required" aria-hidden="true">*</span>
+                  </label>
+                  <input type="email" id="email" name="email" class="form-control"
+                         autocomplete="email" required placeholder="mario.rossi@email.it">
+                  <span class="form-error" id="err-email">Inserisci un indirizzo email valido.</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="telefono_emergenza">
+                  <span id="label-cellulare">Cellulare</span>
+                </label>
+                <input type="tel" id="telefono_emergenza" name="telefono_emergenza"
+                       class="form-control" autocomplete="tel" placeholder="+39 333 1234567">
+                <span class="form-hint">Verrà usato anche per comunicazioni urgenti.</span>
               </div>
             </fieldset>
 
@@ -198,17 +243,64 @@
               </div>
             </fieldset>
 
-            <!-- CONSENSI -->
-            <fieldset class="form-section">
-              <legend>Consensi</legend>
+            <!-- QUOTA ASSOCIATIVA -->
+            <div class="alert alert-info" style="margin-top:var(--space-xl)">
+              <div>
+                <strong>Quota associativa</strong>
+                <p style="margin-top:var(--space-sm);margin-bottom:0;line-height:1.7">
+                  <strong>Nuova iscrizione:</strong> € 110<br>
+                  <strong>Rinnovo</strong> (già iscritti lo scorso anno): € 50
+                </p>
+              </div>
+            </div>
+
+            <!-- DICHIARAZIONI E CONSENSI -->
+            <fieldset class="form-section" style="margin-top:var(--space-xl)">
+              <legend>Dichiarazioni e consensi</legend>
 
               <div class="form-group">
+                <label class="form-check">
+                  <input type="checkbox" id="dichiarazione_tesseramento" required>
+                  <span class="form-check-label" id="label-tesseramento">
+                    Chiedo il tesseramento del/della proprio/a figlio/a all'associazione.
+                    <span class="required" aria-hidden="true">*</span>
+                  </span>
+                </label>
+                <span class="form-error" id="err-dichiarazione_tesseramento">
+                  Questa dichiarazione è obbligatoria.
+                </span>
+              </div>
+
+              <div class="form-group" style="margin-top:var(--space-md)">
+                <label class="form-check">
+                  <input type="checkbox" id="dichiarazione_esonero" required>
+                  <span class="form-check-label">
+                    Esonero i capi da ogni responsabilità civile o penale derivante da incidenti
+                    non dipendenti dalla loro incuria.
+                    <span class="required" aria-hidden="true">*</span>
+                  </span>
+                </label>
+                <span class="form-error" id="err-dichiarazione_esonero">
+                  Questa dichiarazione è obbligatoria.
+                </span>
+              </div>
+
+              <div class="form-group" style="margin-top:var(--space-md)">
+                <label class="form-check">
+                  <input type="checkbox" id="iscrizione_mailing_list">
+                  <span class="form-check-label">
+                    Chiedo che l'indirizzo e-mail venga inserito nella mailing-list aggscomo.
+                  </span>
+                </label>
+              </div>
+
+              <div class="form-group" style="margin-top:var(--space-md)">
                 <label class="form-check">
                   <input type="checkbox" id="consenso_privacy" name="consenso_privacy" required>
                   <span class="form-check-label">
                     Ho letto e accetto la
-                    <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.
-                    Acconsento al trattamento dei dati personali per la gestione dell'iscrizione.
+                    <a href="assets/PRIVACY.pdf" target="_blank" rel="noopener">Privacy Policy</a>.
+                    Acconsento al trattamento dei dati personali per la gestione dell'iscrizione (GDPR).
                     <span class="required" aria-hidden="true">*</span>
                   </span>
                 </label>
@@ -225,14 +317,31 @@
                     sui canali ufficiali dell'associazione (sito, social, materiali promozionali).
                   </span>
                 </label>
-                <span class="form-hint">Opzionale. Puoi revocarlo in qualsiasi momento.</span>
+                <span class="form-hint">Liberatoria foto/video — opzionale. Puoi revocarlo in qualsiasi momento.</span>
               </div>
             </fieldset>
+
+            <!-- BOX PAGAMENTO -->
+            <div class="alert alert-info" style="margin-top:var(--space-xl)">
+              <div>
+                <strong>Modalità di pagamento — Bonifico bancario</strong>
+                <p style="margin-top:var(--space-sm);margin-bottom:0;line-height:1.7">
+                  Intestato a: <strong>ASSOCIAZIONE GRUPPI GUIDE E SCOUT COMO</strong><br>
+                  Banca: <strong>Crédit Agricole</strong><br>
+                  IBAN: <strong>IT05B0623010996000046690131</strong><br>
+                  Causale: <em id="causale-preview">Nome e Cognome – ACCONTO Tesseramento associativa anno ____</em>
+                </p>
+                <p class="form-hint" style="margin-top:var(--space-sm);margin-bottom:0">
+                  Sostituisci "Nome e Cognome" con il nome del ragazzo/a e l'anno associativo selezionato.
+                </p>
+              </div>
+            </div>
 
             <!-- ERRORE GENERALE -->
             <div id="form-error-generale" class="alert alert-error hidden" role="alert"></div>
 
-            <button type="submit" class="btn btn-accent btn-lg btn-full" id="btn-submit">
+            <button type="submit" class="btn btn-accent btn-lg btn-full" id="btn-submit"
+                    style="margin-top:var(--space-xl)">
               Invia iscrizione
             </button>
 

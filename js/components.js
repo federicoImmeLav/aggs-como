@@ -1,3 +1,6 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
+
 /**
  * Inietta header e footer in tutte le pagine.
  * Includi con: <script type="module" src="js/components.js"></script>
@@ -210,3 +213,34 @@ if (footerEl) {
   footerEl.className = 'site-footer';
   renderFooter(footerEl);
 }
+
+// ──────────────────────────────────────────────
+// VISIBILITÀ BOTTONI ISCRIZIONE
+// ──────────────────────────────────────────────
+
+(async function applyIscrizioniSetting() {
+  try {
+    const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const { data } = await sb
+      .from('impostazioni')
+      .select('valore')
+      .eq('chiave', 'iscrizioni_aperte')
+      .single();
+
+    if ((data?.valore ?? 'true') === 'false') {
+      // Nasconde i bottoni CTA "Iscriviti" nell'header (desktop e mobile)
+      if (headerEl) {
+        headerEl.querySelectorAll('a[href="iscrizione.html"]').forEach(el => {
+          el.style.display = 'none';
+        });
+      }
+      // Nasconde il bottone CTA nella home (se presente)
+      const heroBtn = document.getElementById('btn-hero-iscriviti');
+      if (heroBtn) heroBtn.style.display = 'none';
+      const ctaSection = document.getElementById('section-cta-iscrizione');
+      if (ctaSection) ctaSection.style.display = 'none';
+    }
+  } catch {
+    // fail open: mostra i bottoni se non riesce a leggere il setting
+  }
+})();

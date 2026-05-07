@@ -16,7 +16,23 @@ function annoAssociativo() {
     : `${anno - 1}-${anno}`;
 }
 
-function init() {
+async function init() {
+  // Controlla se le iscrizioni sono aperte
+  try {
+    const { data } = await supabase
+      .from('impostazioni')
+      .select('valore')
+      .eq('chiave', 'iscrizioni_aperte')
+      .single();
+
+    if ((data?.valore ?? 'true') === 'false') {
+      mostraIscrizioniChiuse();
+      return;
+    }
+  } catch {
+    // fail open: se non riesce a leggere il setting, mostra il form
+  }
+
   document.getElementById('anno_associativo').value = annoAssociativo();
 
   const dataNascitaEl   = document.getElementById('data_nascita');
@@ -43,6 +59,24 @@ function init() {
     if (!validaForm()) return;
     await inviaIscrizione();
   });
+}
+
+function mostraIscrizioniChiuse() {
+  const container = document.querySelector('.container-sm');
+  if (!container) return;
+  container.innerHTML = `
+    <div style="text-align:center;padding:var(--space-2xl) 0">
+      <div style="font-size:3.5rem;margin-bottom:var(--space-lg)" aria-hidden="true">🔒</div>
+      <h2 style="color:var(--color-primary);margin-bottom:var(--space-md)">
+        Iscrizioni chiuse
+      </h2>
+      <p class="text-muted" style="max-width:46ch;margin-inline:auto;margin-bottom:var(--space-xl)">
+        Le iscrizioni all'anno associativo sono attualmente chiuse.<br>
+        Torna presto per scoprire quando riaprono.
+      </p>
+      <a href="contatti.html" class="btn btn-primary btn-lg">Hai domande? Contattaci</a>
+    </div>
+  `;
 }
 
 function isMinorenne(dataNascita) {

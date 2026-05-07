@@ -117,10 +117,12 @@ function switchTab(tab) {
   document.getElementById('panel-attivita').classList.toggle('hidden', tab !== 'attivita');
   document.getElementById('panel-iscrizioni').classList.toggle('hidden', tab !== 'iscrizioni');
   document.getElementById('panel-avvisi').classList.toggle('hidden', tab !== 'avvisi');
+  document.getElementById('panel-impostazioni').classList.toggle('hidden', tab !== 'impostazioni');
 
-  if (tab === 'attivita')   loadAttivita();
-  if (tab === 'iscrizioni') initIscrizioni();
-  if (tab === 'avvisi')     loadAvvisiAdmin();
+  if (tab === 'attivita')     loadAttivita();
+  if (tab === 'iscrizioni')   initIscrizioni();
+  if (tab === 'avvisi')       loadAvvisiAdmin();
+  if (tab === 'impostazioni') loadImpostazioni();
 }
 
 // ──────────────────────────────────────────────
@@ -986,6 +988,82 @@ async function eliminaAvviso() {
   chiudiModalAvviso();
   loadAvvisiAdmin();
   window.showToast('Avviso eliminato.');
+}
+
+// ──────────────────────────────────────────────
+// IMPOSTAZIONI
+// ──────────────────────────────────────────────
+
+async function loadImpostazioni() {
+  const badge = document.getElementById('iscrizioni-stato-badge');
+  const btn   = document.getElementById('btn-toggle-iscrizioni');
+  if (!badge || !btn) return;
+
+  badge.innerHTML = '<span class="spinner" style="width:1.25rem;height:1.25rem;border-width:2px"></span>';
+  btn.disabled    = true;
+  btn.textContent = 'Caricamento…';
+
+  const { data, error } = await supabase
+    .from('impostazioni')
+    .select('valore')
+    .eq('chiave', 'iscrizioni_aperte')
+    .single();
+
+  if (error) {
+    badge.innerHTML = `
+      <div class="alert alert-error" style="margin:0">
+        Errore: ${error.message}<br>
+        Esegui prima la migration SQL (sezione IMPOSTAZIONI in schema.sql).
+      </div>`;
+    btn.textContent = 'Non disponibile';
+    return;
+  }
+
+  renderStatoIscrizioni((data?.valore ?? 'true') !== 'false');
+}
+
+function renderStatoIscrizioni(aperte) {
+  const badge = document.getElementById('iscrizioni-stato-badge');
+  const btn   = document.getElementById('btn-toggle-iscrizioni');
+  if (!badge || !btn) return;
+
+  badge.innerHTML = aperte
+    ? '<span class="badge badge-success" style="font-size:.9375rem;padding:.375rem .875rem">Aperte</span>'
+    : '<span class="badge badge-neutral" style="font-size:.9375rem;padding:.375rem .875rem">Chiuse</span>';
+
+  btn.textContent       = aperte ? 'Chiudi iscrizioni' : 'Apri iscrizioni';
+  btn.style.background  = aperte ? 'var(--color-error)' : '#2d7a47';
+  btn.style.borderColor = aperte ? 'var(--color-error)' : '#2d7a47';
+  btn.disabled          = false;
+  btn.onclick           = () => toggleIscrizioni(aperte);
+}
+
+async function toggleIscrizioni(attualmenteAperte) {
+  if (attualmenteAperte) {
+    const ok = confirm(
+      'Chiudere le iscrizioni?\n\n' +
+      'Il modulo di iscrizione e i pulsanti "Iscriviti" non saranno più visibili sul sito.'
+    );
+    if (!ok) return;
+  }
+
+  const btn = document.getElementById('btn-toggle-iscrizioni');
+  btn.disabled  = true;
+  btn.innerHTML = '<span class="spinner" style="width:1rem;height:1rem;border-width:2px"></span>';
+
+  const { error } = await supabase
+    .from('impostazioni')
+    .update({ valore: attualmenteAperte ? 'false' : 'true', updated_at: new Date().toISOString() })
+    .eq('chiave', 'iscrizioni_aperte');
+
+  if (error) {
+    window.showToast(`Errore: ${error.message}`, 'error');
+    renderStatoIscrizioni(attualmenteAperte);
+    return;
+  }
+
+  window.showToast(attualmenteAperte ? 'Iscrizioni chiuse.' : 'Iscrizioni aperte.');
+  renderStatoIscrizioni(!attualmenteAperte);
 }
 
 // ──────────────────────────────────────────────

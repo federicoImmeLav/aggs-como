@@ -127,6 +127,7 @@
         <button class="admin-tab active" data-tab="attivita">Attività</button>
         <button class="admin-tab" data-tab="iscrizioni">Iscrizioni</button>
         <button class="admin-tab" data-tab="avvisi">Avvisi</button>
+        <button class="admin-tab" data-tab="impostazioni">Impostazioni</button>
       </div>
     </div>
 
@@ -158,6 +159,42 @@
           <div class="loading-overlay">
             <span class="spinner"></span><span>Caricamento…</span>
           </div>
+        </div>
+      </div>
+
+      <!-- ── Panel: Impostazioni ── -->
+      <div id="panel-impostazioni" class="hidden">
+        <h2 style="color:var(--color-primary);font-size:1.375rem;margin-bottom:var(--space-xl)">
+          Impostazioni
+        </h2>
+
+        <div style="max-width:600px;display:flex;flex-direction:column;gap:var(--space-lg)">
+
+          <!-- Card iscrizioni anno associativo -->
+          <div style="background:var(--color-surface);border:1px solid var(--color-border);
+                      border-radius:var(--radius-lg);padding:var(--space-xl)">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;
+                        gap:var(--space-lg);flex-wrap:wrap">
+              <div>
+                <h3 style="font-size:1.0625rem;color:var(--color-text);margin-bottom:var(--space-xs)">
+                  Iscrizioni anno associativo
+                </h3>
+                <p class="text-muted" style="font-size:.875rem;max-width:36ch;
+                                             margin-bottom:var(--space-lg)">
+                  Controlla la visibilità del modulo di iscrizione e dei pulsanti
+                  "Iscriviti" su tutto il sito.
+                </p>
+                <div id="iscrizioni-stato-badge">
+                  <span class="spinner" style="width:1.25rem;height:1.25rem;border-width:2px"></span>
+                </div>
+              </div>
+              <button id="btn-toggle-iscrizioni" class="btn btn-accent"
+                      disabled style="flex-shrink:0;min-width:10rem">
+                Caricamento…
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
 

@@ -171,3 +171,26 @@ alter table attivita add column if not exists documenti jsonb default '[]'::json
 -- Non abilitare policy SELECT/UPDATE/DELETE pubbliche sulle
 -- tabelle soci, iscrizioni_attivita e contatti.
 -- ============================================================
+
+-- ============================================================
+-- IMPOSTAZIONI — configurazioni globali del sito
+-- ============================================================
+
+create table if not exists impostazioni (
+  chiave     text primary key,
+  valore     text not null,
+  updated_at timestamptz default now()
+);
+
+-- Valore di default: iscrizioni aperte
+insert into impostazioni (chiave, valore)
+  values ('iscrizioni_aperte', 'true')
+  on conflict (chiave) do nothing;
+
+alter table impostazioni enable row level security;
+
+-- Chiunque può leggere le impostazioni pubbliche
+create policy "Lettura pubblica impostazioni"
+  on impostazioni for select
+  using (true);
+-- UPDATE solo via service_role key (bypasssa RLS)

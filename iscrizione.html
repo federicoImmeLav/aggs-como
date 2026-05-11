@@ -102,32 +102,45 @@
 
               <div class="form-grid-2">
                 <div class="form-group">
-                  <label class="form-label" for="codice_fiscale">Codice fiscale</label>
+                  <label class="form-label" for="codice_fiscale">
+                    Codice fiscale <span class="required" aria-hidden="true">*</span>
+                  </label>
                   <input type="text" id="codice_fiscale" name="codice_fiscale" class="form-control"
                          autocomplete="off" placeholder="RSSMRO80A01H501U"
-                         maxlength="16" style="text-transform:uppercase">
+                         maxlength="16" style="text-transform:uppercase" required>
+                  <span class="form-error" id="err-codice_fiscale">Inserisci il codice fiscale.</span>
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="classe_frequentata">Classe frequentata</label>
-                  <input type="text" id="classe_frequentata" name="classe_frequentata"
-                         class="form-control" placeholder="3ª media">
+                  <label class="form-label" for="classe_frequentata">
+                    Classe frequentata <span class="required" aria-hidden="true">*</span>
+                  </label>
+                  <select id="classe_frequentata" name="classe_frequentata" class="form-control" required>
+                    <option value="">Seleziona classe…</option>
+                    <option value="3ª elementare">3ª elementare</option>
+                    <option value="4ª elementare">4ª elementare</option>
+                    <option value="5ª elementare">5ª elementare</option>
+                    <option value="1ª media">1ª media</option>
+                    <option value="2ª media">2ª media</option>
+                    <option value="3ª media">3ª media</option>
+                    <option value="1ª superiore">1ª superiore</option>
+                  </select>
+                  <span class="form-error" id="err-classe_frequentata">Seleziona la classe frequentata.</span>
                 </div>
               </div>
 
               <div class="form-grid-2">
                 <div class="form-group">
                   <label class="form-label" for="unita">
-                    Unità <span class="required" aria-hidden="true">*</span>
+                    Reparto <span class="required" aria-hidden="true">*</span>
                   </label>
                   <select id="unita" name="unita" class="form-control" required>
-                    <option value="">Seleziona unità…</option>
+                    <option value="">Seleziona reparto…</option>
                     <option value="coccinelle">Cerchio coccinelle</option>
                     <option value="lupetti">Branco lupetti</option>
                     <option value="guide">Reparto guide</option>
                     <option value="scout">Reparto scout</option>
-                    <option value="clan">Cambusa</option>
                   </select>
-                  <span class="form-error" id="err-unita">Seleziona l'unità di appartenenza.</span>
+                  <span class="form-error" id="err-unita">Seleziona il reparto di appartenenza.</span>
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="anno_associativo">
@@ -223,10 +236,11 @@
 
               <div class="form-group">
                 <label class="form-label" for="telefono_emergenza">
-                  <span id="label-cellulare">Cellulare</span>
+                  <span id="label-cellulare">Cellulare</span> <span class="required" aria-hidden="true">*</span>
                 </label>
                 <input type="tel" id="telefono_emergenza" name="telefono_emergenza"
-                       class="form-control" autocomplete="tel" placeholder="+39 333 1234567">
+                       class="form-control" autocomplete="tel" placeholder="+39 333 1234567" required>
+                <span class="form-error" id="err-telefono_emergenza">Inserisci il numero di cellulare.</span>
                 <span class="form-hint">Verrà usato anche per comunicazioni urgenti.</span>
               </div>
             </fieldset>
@@ -330,9 +344,6 @@
                   Banca: <strong>Crédit Agricole</strong><br>
                   IBAN: <strong>IT05B0623010996000046690131</strong><br>
                   Causale: <em id="causale-preview">Nome e Cognome – ACCONTO Tesseramento associativa anno ____</em>
-                </p>
-                <p class="form-hint" style="margin-top:var(--space-sm);margin-bottom:0">
-                  Sostituisci "Nome e Cognome" con il nome del ragazzo/a e l'anno associativo selezionato.
                 </p>
               </div>
             </div>

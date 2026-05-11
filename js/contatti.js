@@ -61,6 +61,7 @@ async function inviaIscrizione() {
     nome:             document.getElementById('nome').value.trim() || null,
     cognome:          document.getElementById('cognome').value.trim() || null,
     nome_ragazzo:     document.getElementById('nome_ragazzo').value.trim() || null,
+    unita:            document.getElementById('unita').value || null,
     consenso_privacy: true,
     attivo:           true,
   };

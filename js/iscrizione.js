@@ -181,14 +181,17 @@ function validaForm() {
   }
 
   // Dati ragazzo
-  if (!document.getElementById('cognome')?.value.trim())        segnaErrore('cognome');
-  if (!document.getElementById('nome')?.value.trim())           segnaErrore('nome');
-  if (!document.getElementById('luogo_nascita')?.value.trim())  segnaErrore('luogo_nascita');
-  if (!document.getElementById('data_nascita')?.value)          segnaErrore('data_nascita');
-  if (!document.getElementById('unita')?.value)                 segnaErrore('unita');
+  if (!document.getElementById('cognome')?.value.trim())              segnaErrore('cognome');
+  if (!document.getElementById('nome')?.value.trim())                 segnaErrore('nome');
+  if (!document.getElementById('luogo_nascita')?.value.trim())        segnaErrore('luogo_nascita');
+  if (!document.getElementById('data_nascita')?.value)                segnaErrore('data_nascita');
+  if (!document.getElementById('codice_fiscale')?.value.trim())       segnaErrore('codice_fiscale');
+  if (!document.getElementById('classe_frequentata')?.value)          segnaErrore('classe_frequentata');
+  if (!document.getElementById('unita')?.value)                       segnaErrore('unita');
 
-  // Email
-  if (!document.getElementById('email')?.value.includes('@'))   segnaErrore('email');
+  // Email e cellulare
+  if (!document.getElementById('email')?.value.includes('@'))         segnaErrore('email');
+  if (!document.getElementById('telefono_emergenza')?.value.trim())   segnaErrore('telefono_emergenza');
 
   // Dati genitore (solo se minorenne)
   const sezioneGen = document.getElementById('sezione-genitore');

@@ -645,6 +645,8 @@ select.form-control {
 }
 
 .lightbox-caption {
+  font-family: var(--font-serif);
+  font-style: italic;
   color: rgba(255, 255, 255, 0.75);
   font-size: 0.9375rem;
   text-align: center;

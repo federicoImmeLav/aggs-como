@@ -1,15 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,500;1,400&display=swap');
 
 /* ============================================================
    VARIABILI
    ============================================================ */
 
 :root {
-  --color-primary:       #003985;
-  --color-primary-dark:  #002660;
-  --color-primary-light: #e8eef7;
-  --color-accent:        #ff751f;
-  --color-accent-dark:   #e05e0a;
+  --color-primary:       #061991;
+  --color-primary-dark:  #04116a;
+  --color-primary-light: #eaeafe;
+  --color-accent:        #EE891D;
+  --color-accent-dark:   #c97012;
   --color-bg:            #f9f7f4;
   --color-surface:       #ffffff;
   --color-text:          #1a1a2e;
@@ -20,8 +20,9 @@
   --color-error:         #c0392b;
   --color-error-bg:      #fdf0ee;
 
-  --font-heading: 'DM Sans', sans-serif;
+  --font-heading: 'Space Mono', monospace;
   --font-body:    'DM Sans', sans-serif;
+  --font-serif:   'IBM Plex Serif', serif;
 
   --space-xs:  0.25rem;
   --space-sm:  0.5rem;
@@ -103,7 +104,8 @@ button {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
   color: var(--color-text);
 }
 

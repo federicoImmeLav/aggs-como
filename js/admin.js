@@ -25,7 +25,7 @@ const SESSION_KEY    = 'aggs_admin_ok';
   container.setAttribute('aria-live', 'polite');
   document.body.appendChild(container);
   window.showToast = function(msg, type = 'success') {
-    const bg = { success: '#2d7a47', error: '#c0392b', info: '#003985' }[type] || '#003985';
+    const bg = { success: '#2d7a47', error: '#c0392b', info: '#061991' }[type] || '#061991';
     const t = document.createElement('div');
     Object.assign(t.style, {
       background: bg, color: '#fff', padding: '0.75rem 1.25rem', borderRadius: '8px',
@@ -295,6 +295,7 @@ function initModalAttivita() {
     document.getElementById('att-attiva').checked = true;
     document.getElementById('modal-att-title').textContent = 'Nuova attività';
     document.getElementById('modal-att-save').textContent = 'Salva attività';
+    document.getElementById('modal-att-delete').classList.add('hidden');
     syncNotaIscrizioni();
     renderCampiExtraList();
     renderDocumentiList();
@@ -308,6 +309,7 @@ function initModalAttivita() {
   });
 
   document.getElementById('modal-att-save').addEventListener('click', salvaAttivita);
+  document.getElementById('modal-att-delete').addEventListener('click', eliminaAttivita);
 
   // Builder
   document.getElementById('att-ha-form').addEventListener('change', syncNotaIscrizioni);
@@ -385,6 +387,7 @@ async function apriModalModifica(id) {
   document.getElementById('form-attivita').reset();
   document.getElementById('modal-att-title').textContent = 'Modifica attività';
   document.getElementById('modal-att-save').textContent = 'Salva modifiche';
+  document.getElementById('modal-att-delete').classList.remove('hidden');
   document.getElementById('form-att-error').classList.add('hidden');
   renderCampiExtraList();
   apriModal();
@@ -596,6 +599,20 @@ async function salvaAttivita() {
   if (window.showToast) window.showToast(editingId ? 'Attività aggiornata.' : 'Attività salvata con successo.');
 }
 
+async function eliminaAttivita() {
+  if (!editingId) return;
+  if (!confirm('Eliminare questa attività definitivamente?\n\nVerranno eliminate anche tutte le iscrizioni collegate. L\'azione non è reversibile.')) return;
+
+  const { error } = await supabase
+    .from('attivita').delete().eq('id', editingId);
+
+  if (error) { window.showToast(`Errore: ${error.message}`, 'error'); return; }
+
+  chiudiModal();
+  loadAttivita();
+  window.showToast('Attività eliminata.');
+}
+
 // ──────────────────────────────────────────────
 // ISCRIZIONI
 // ──────────────────────────────────────────────
@@ -780,8 +797,8 @@ function exportCSV(data) {
 let editingAvvisoId = null;
 
 const AVVISO_CONFIG = {
-  info:       { label: 'Info',       badgeStyle: 'background:#003985;color:#fff' },
-  importante: { label: 'Importante', badgeStyle: 'background:#ff751f;color:#fff' },
+  info:       { label: 'Info',       badgeStyle: 'background:#061991;color:#fff' },
+  importante: { label: 'Importante', badgeStyle: 'background:#EE891D;color:#fff' },
   urgente:    { label: 'Urgente',    badgeStyle: 'background:#c0392b;color:#fff' },
 };
 

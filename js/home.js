@@ -85,8 +85,8 @@ async function loadPreview() {
 // ── Avvisi ──────────────────────────────────────────────────────
 
 const AVVISO_TIPO = {
-  info:       { label: 'Info',       badgeStyle: 'background:#003985;color:#fff', border: '#003985' },
-  importante: { label: 'Importante', badgeStyle: 'background:#ff751f;color:#fff', border: '#ff751f' },
+  info:       { label: 'Info',       badgeStyle: 'background:#061991;color:#fff', border: '#061991' },
+  importante: { label: 'Importante', badgeStyle: 'background:#EE891D;color:#fff', border: '#EE891D' },
   urgente:    { label: 'Urgente',    badgeStyle: 'background:#c0392b;color:#fff', border: '#c0392b' },
 };
 

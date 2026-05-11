@@ -168,7 +168,7 @@ function renderFooter(el) {
   document.body.appendChild(container);
 
   window.showToast = function(msg, type = 'success') {
-    const bg = { success: '#2d7a47', error: '#c0392b', info: '#003985' }[type] || '#003985';
+    const bg = { success: '#2d7a47', error: '#c0392b', info: '#061991' }[type] || '#061991';
     const toast = document.createElement('div');
     Object.assign(toast.style, {
       background: bg,

@@ -143,6 +143,9 @@ function renderPagina(a) {
                 <div>${quotaHTML}</div>
               </div>` : ''}
               ${unitaHTML ? `<div><p class="text-xs text-muted font-semibold" style="text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Reparto</p>${unitaHTML}</div>` : ''}
+              <div style="display:flex;gap:var(--space-sm);flex-wrap:wrap;align-items:flex-end">
+                <button type="button" id="btn-google-cal" class="btn btn-outline btn-sm">Aggiungi a Calendar</button>
+              </div>
             </div>
 
             <!-- Descrizione -->
@@ -169,6 +172,8 @@ function renderPagina(a) {
       </div>
     </div>
   `;
+
+  document.getElementById('btn-google-cal').addEventListener('click', () => window.open(urlGoogleCal(a), '_blank', 'noopener'));
 
   if (a.ha_form_iscrizione) {
     if (a.tipo_modulo === 'campo_minori') {
@@ -544,6 +549,16 @@ function buildFormCampoMinoriHTML() {
           <span class="form-error" id="err-unita">Seleziona il reparto.</span>
         </div>
       </div>
+
+      <div class="form-group">
+        <label class="form-label" for="codice_fiscale_ragazzo">
+          Codice fiscale del ragazzo/a <span class="required" aria-hidden="true">*</span>
+        </label>
+        <input type="text" id="codice_fiscale_ragazzo" name="codice_fiscale_ragazzo"
+               class="form-control" required placeholder="RSSMRA10A01C933K"
+               maxlength="16" style="text-transform:uppercase">
+        <span class="form-error" id="err-codice_fiscale_ragazzo">Inserisci il codice fiscale del ragazzo/a.</span>
+      </div>
     </fieldset>
 
     <fieldset class="form-section">
@@ -556,6 +571,16 @@ function buildFormCampoMinoriHTML() {
         <input type="text" id="nome_genitore" name="nome_genitore" class="form-control"
                autocomplete="name" required placeholder="Anna Rossi">
         <span class="form-error" id="err-nome_genitore">Inserisci il nome e cognome del genitore.</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="codice_fiscale_genitore">
+          Codice fiscale del genitore <span class="required" aria-hidden="true">*</span>
+        </label>
+        <input type="text" id="codice_fiscale_genitore" name="codice_fiscale_genitore"
+               class="form-control" required placeholder="RSSMRA80A01C933K"
+               maxlength="16" style="text-transform:uppercase">
+        <span class="form-error" id="err-codice_fiscale_genitore">Inserisci il codice fiscale del genitore.</span>
       </div>
 
       <div class="form-group">
@@ -702,6 +727,7 @@ function validaFormCampoMinori(form) {
   }
 
   ['nome', 'cognome', 'data_nascita', 'unita', 'nome_genitore',
+   'codice_fiscale_ragazzo', 'codice_fiscale_genitore',
    'indirizzo_genitore', 'telefono'].forEach(id => {
     if (!form.querySelector(`#${id}`)?.value.trim()) segnaErrore(id);
   });
@@ -750,7 +776,9 @@ async function inviaIscrizioneCampoMinori(form, attivita) {
     presa_visione_documenti: true,
     consenso_privacy:        true,
     risposte_extra: {
-      unita: form.querySelector('#unita').value,
+      unita:                   form.querySelector('#unita').value,
+      codice_fiscale_ragazzo:  form.querySelector('#codice_fiscale_ragazzo').value.trim().toUpperCase(),
+      codice_fiscale_genitore: form.querySelector('#codice_fiscale_genitore').value.trim().toUpperCase(),
     },
   };
 
@@ -778,6 +806,23 @@ function formatData(iso) {
   return new Date(iso + 'T00:00:00').toLocaleDateString('it-IT', {
     day: 'numeric', month: 'long', year: 'numeric',
   });
+}
+
+function calDataFine(iso) {
+  const d = new Date(iso + 'T00:00:00');
+  d.setDate(d.getDate() + 1);
+  return d.toISOString().slice(0, 10).replace(/-/g, '');
+}
+
+function urlGoogleCal(a) {
+  const fine = a.data_fine || a.data_inizio;
+  const params = new URLSearchParams({
+    action:  'TEMPLATE',
+    text:    a.nome,
+    dates:   `${a.data_inizio.replace(/-/g, '')}/${calDataFine(fine)}`,
+    details: (a.descrizione || '').replace(/<[^>]*>/g, ''),
+  });
+  return `https://calendar.google.com/calendar/render?${params}`;
 }
 
 function mostraErrore(msg, conLink = false) {

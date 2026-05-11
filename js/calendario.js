@@ -109,9 +109,12 @@ function cardListaHTML(a) {
     ${a.descrizione
       ? `<p style="max-width:none;font-size:0.9375rem;color:var(--color-text-muted);margin-bottom:var(--space-md)">${a.descrizione.slice(0, 160)}${a.descrizione.length > 160 ? '…' : ''}</p>`
       : ''}
-    <a href="attivita.html?id=${a.id}" class="btn btn-primary btn-sm">
-      ${a.ha_form_iscrizione ? 'Iscriviti' : 'Dettagli'}
-    </a>
+    <div style="display:flex;gap:var(--space-sm);flex-wrap:wrap">
+      <a href="attivita.html?id=${a.id}" class="btn btn-primary btn-sm">
+        ${a.ha_form_iscrizione ? 'Iscriviti' : 'Dettagli'}
+      </a>
+      <button type="button" class="btn btn-outline btn-sm" onclick="apriGoogleCalAttivita('${a.id}')">Aggiungi a Calendar</button>
+    </div>
   </div>
 </article>
   `.trim();
@@ -223,6 +226,28 @@ function aggiornaStatusFiltro() {
     ? `Nessuna attività trovata per ${label}.`
     : `${n} attività trovate${tipoFiltro !== 'tutti' ? ` per ${label}` : ''}.`;
 }
+
+function calDataFine(iso) {
+  const d = new Date(iso + 'T00:00:00');
+  d.setDate(d.getDate() + 1);
+  return d.toISOString().slice(0, 10).replace(/-/g, '');
+}
+
+function urlGoogleCal(a) {
+  const fine = a.data_fine || a.data_inizio;
+  const params = new URLSearchParams({
+    action:  'TEMPLATE',
+    text:    a.nome,
+    dates:   `${a.data_inizio.replace(/-/g, '')}/${calDataFine(fine)}`,
+    details: (a.descrizione || '').replace(/<[^>]*>/g, ''),
+  });
+  return `https://calendar.google.com/calendar/render?${params}`;
+}
+
+window.apriGoogleCalAttivita = (id) => {
+  const a = tutteLeAttivita.find(x => String(x.id) === String(id));
+  if (a) window.open(urlGoogleCal(a), '_blank', 'noopener');
+};
 
 // ──────────────────────────────────────────────
 // EVENT LISTENERS

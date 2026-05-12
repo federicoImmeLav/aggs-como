@@ -192,8 +192,28 @@
 
 @media (min-width: 900px) {
   .footer-grid {
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1.4fr;
   }
+}
+
+.footer-5x1000-text {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.55;
+  margin-bottom: var(--space-sm);
+}
+
+.footer-5x1000-cf {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  background: rgba(255,255,255,0.12);
+  display: inline-block;
+  padding: 0.3em 0.7em;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.25);
+  margin-top: var(--space-xs);
 }
 
 .footer-brand .site-logo-name {
@@ -274,10 +294,21 @@
    ============================================================ */
 
 .hero {
-  background: linear-gradient(135deg, var(--color-primary) 0%, #005bb5 100%);
+  background:
+    linear-gradient(rgba(0,40,100,0.62), rgba(0,40,100,0.72)),
+    url('../assets/hero.webp') center / cover no-repeat;
   color: #ffffff;
-  padding: var(--space-2xl) 0;
+  min-height: calc(100dvh - 4rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  position: relative;
+}
+
+.hero-content {
+  padding-block: var(--space-2xl);
 }
 
 .hero-eyebrow {
@@ -308,6 +339,36 @@
   flex-wrap: wrap;
   gap: var(--space-md);
   justify-content: center;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  animation: hero-bounce 2s ease-in-out infinite;
+}
+
+.hero-scroll:hover {
+  color: #ffffff;
+}
+
+.hero-scroll-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+@keyframes hero-bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(6px); }
 }
 
 /* ============================================================
@@ -663,4 +724,27 @@
 
 @media (min-width: 768px) {
   .hide-desktop { display: none !important; }
+}
+
+/* ============================================================
+   REVEAL ON SCROLL
+   ============================================================ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
 }

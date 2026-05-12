@@ -13,6 +13,20 @@ function init() {
     if (!validaForm()) return;
     await inviaIscrizione();
   });
+
+  checkIscrizioniAperte();
+}
+
+async function checkIscrizioniAperte() {
+  const { data, error } = await supabase
+    .from('impostazioni')
+    .select('valore')
+    .eq('chiave', 'iscrizioni_aperte')
+    .single();
+
+  if (!error && (data?.valore ?? 'true') === 'false') {
+    document.getElementById('box-iscrizione-cta')?.classList.add('hidden');
+  }
 }
 
 // ──────────────────────────────────────────────

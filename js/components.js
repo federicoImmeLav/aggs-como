@@ -1,5 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
+import './reveal.js';
 
 /**
  * Inietta header e footer in tutte le pagine.
@@ -37,7 +38,7 @@ function renderHeader(el) {
            onerror="this.style.display='none'">
       <span class="site-logo-name">
         AGGS Como
-        <span>Associazione Guide e Scout</span>
+        <span>Associazione Gruppi Guide e Scouts</span>
       </span>
     </a>
 
@@ -99,7 +100,7 @@ function renderFooter(el) {
              onerror="this.style.display='none'">
         <span class="site-logo-name">
           AGGS Como
-          <span>Associazione Guide e Scout</span>
+          <span>Associazione Gruppi Guide e Scouts</span>
         </span>
       </a>
       <p class="footer-tagline">Crescere insieme attraverso l'avventura, la natura e i valori scout.</p>
@@ -122,6 +123,12 @@ function renderFooter(el) {
         <li><a href="mailto:aggscomo@gmail.com">aggscomo@gmail.com</a></li>
         <li><a href="contatti.html">Iscriviti alla newsletter</a></li>
       </ul>
+    </div>
+
+    <div class="footer-5x1000">
+      <p class="footer-heading">Sostienici con il 5×1000</p>
+      <p class="footer-5x1000-text">Nella dichiarazione dei redditi (730&nbsp;/&nbsp;CU&nbsp;/&nbsp;Modello&nbsp;Redditi), firma nel riquadro <em>«Sostegno degli enti del Terzo Settore»</em> e indica il codice fiscale:</p>
+      <p class="footer-5x1000-cf">95062000138</p>
     </div>
 
   </div>

@@ -279,19 +279,47 @@ async function generateCampoPDF(record: Record<string, unknown>, nomeAttivita: s
   };
 
   const risposteExtra = (record.risposte_extra as Record<string, unknown>) ?? {};
-  const unita       = String(risposteExtra.unita ?? '');
-  const indirizzo   = String(risposteExtra.indirizzo ?? '');
-  const ragazzoNome = `${record.cognome ?? ''} ${record.nome ?? ''}`.trim();
+  const unita        = String(risposteExtra.unita ?? '');
+  const indirizzo    = String(record.indirizzo_genitore ?? risposteExtra.indirizzo ?? '');
+  const ragazzoNome  = `${record.cognome ?? ''} ${record.nome ?? ''}`.trim();
   const nomeGenitore = String(record.nome_genitore ?? '');
-  const telefono    = String(record.telefono ?? '');
+  const telefono     = String(record.telefono ?? '');
+  const telefono2    = String(record.telefono_2 ?? '');
+  const telefono3    = String(record.telefono_3 ?? '');
+  const cfRagazzo    = String(risposteExtra.codice_fiscale_ragazzo ?? '');
+  const cfGenitore   = String(risposteExtra.codice_fiscale_genitore ?? '');
 
-  // ── Dati ragazzo / genitore ──────────────────────────────
-  field('Cognome e nome del ragazzo/a', ragazzoNome);
-  field('Unità', unita, margin + 200);
+  const splitX = margin + 250;
 
+  // ── Dati ragazzo ─────────────────────────────────────────
+  draw('Cognome e nome del ragazzo/a', margin, 8, font, grayColor);
+  draw('Codice fiscale del ragazzo/a', splitX + 10, 8, font, grayColor);
+  nl(12);
+  draw(ragazzoNome || '—', margin, 10, fontBold, darkColor);
+  draw(cfRagazzo || '—', splitX + 10, 10, fontBold, darkColor);
+  nl(6);
+  hLine(margin, splitX);
+  hLine(splitX + 10, pageWidth - margin);
+  nl(16);
+
+  draw('Unità', margin, 8, font, grayColor);
+  nl(12);
+  draw(unita || '—', margin, 10, fontBold, darkColor);
+  nl(6);
+  hLine(margin, margin + 200);
+  nl(16);
+
+  // ── Dati genitore ─────────────────────────────────────────
   draw('Il/La sottoscritto/a (genitore / esercente la responsabilità genitoriale)', margin, 9, font, darkColor);
   nl(16);
-  field('Nome e cognome del genitore', nomeGenitore);
+  draw('Nome e cognome del genitore', margin, 8, font, grayColor);
+  draw('Codice fiscale del genitore', splitX + 10, 8, font, grayColor);
+  nl(12);
+  draw(nomeGenitore || '—', margin, 10, fontBold, darkColor);
+  draw(cfGenitore || '—', splitX + 10, 10, fontBold, darkColor);
+  nl(6);
+  hLine(margin, splitX);
+  hLine(splitX + 10, pageWidth - margin);
 
   hLine();
   nl(16);
@@ -329,6 +357,8 @@ async function generateCampoPDF(record: Record<string, unknown>, nomeAttivita: s
   draw('Telefono 3', col3x, 8, font, grayColor);
   nl(12);
   draw(telefono || '—', margin, 10, fontBold, darkColor);
+  if (telefono2) draw(telefono2, col2x, 10, fontBold, darkColor);
+  if (telefono3) draw(telefono3, col3x, 10, fontBold, darkColor);
   nl(6);
   hLine(margin, col2x - 10);
   hLine(col2x, col3x - 10);
@@ -365,7 +395,7 @@ async function generateCampoPDF(record: Record<string, unknown>, nomeAttivita: s
   nl(10);
   hLine();
   nl(14);
-  draw("Consegnare questo modulo firmato al capo unità prima dell'inizio dell'attività.", margin, 8, font, grayColor);
+  draw("Consegnare il modulo firmato alla segreteria all'indirizzo aggscomo@gmail.com", margin, 8, font, grayColor);
 
   const pdfBytes = await pdfDoc.save();
   let binary = '';
@@ -405,7 +435,7 @@ function sociEmail(record: Record<string, unknown>): { subject: string; html: st
         <tr>
           <td style="background:#003985;padding:32px 40px;text-align:center;">
             <p style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:0.3px;">AGGS Como</p>
-            <p style="margin:8px 0 0;color:#a8c4e8;font-size:14px;">Associazione Guide e Scout Como</p>
+            <p style="margin:8px 0 0;color:#a8c4e8;font-size:14px;">Associazione Gruppi Guide e Scouts</p>
           </td>
         </tr>
 
@@ -531,7 +561,7 @@ function attivitaEmail(
         <tr>
           <td style="background:#003985;padding:32px 40px;text-align:center;">
             <p style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:0.3px;">AGGS Como</p>
-            <p style="margin:8px 0 0;color:#a8c4e8;font-size:14px;">Associazione Guide e Scout Como</p>
+            <p style="margin:8px 0 0;color:#a8c4e8;font-size:14px;">Associazione Gruppi Guide e Scouts</p>
           </td>
         </tr>
 

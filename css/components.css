@@ -129,6 +129,8 @@
   padding: var(--space-lg);
 }
 
+.card-body p { max-width: none; }
+
 .card-header {
   padding: var(--space-lg);
   border-bottom: 1px solid var(--color-border);
@@ -153,6 +155,16 @@
 .card-attivita:hover {
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
+}
+
+/* Card unità (Chi siamo — homepage) */
+.card-unit {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  overflow: hidden;
+}
+.card-unit-accent {
+  width: 6px;
 }
 
 /* ============================================================
@@ -492,6 +504,12 @@ select.form-control {
   font-size: 2.5rem;
   margin-bottom: var(--space-md);
   opacity: 0.5;
+}
+
+.card-value-icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-md);
+  line-height: 1;
 }
 
 /* ============================================================

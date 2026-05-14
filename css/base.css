@@ -157,6 +157,7 @@ small {
 .text-accent  { color: var(--color-accent); }
 .text-success { color: var(--color-success); }
 .text-error   { color: var(--color-error); }
+.text-white   { color: #ffffff; }
 .text-sm      { font-size: 0.875rem; }
 .text-xs      { font-size: 0.8125rem; }
 .font-medium  { font-weight: 500; }

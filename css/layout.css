@@ -383,8 +383,29 @@
   background-color: var(--color-primary-light);
 }
 
+.section-dark {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+.section-dark h2 {
+  color: #ffffff;
+}
+.section-dark p {
+  color: rgba(255,255,255,0.85);
+  max-width: 52ch;
+  margin-inline: auto;
+}
+
 .section-header {
   margin-bottom: var(--space-xl);
+}
+
+.section-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
 }
 
 .section-title {
@@ -419,6 +440,10 @@
   .cards-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+@media (min-width: 900px) {
+  .cards-grid-2 { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* ============================================================
@@ -747,4 +772,117 @@
     opacity: 1;
     transform: none;
   }
+}
+
+/* ============================================================
+   STATS STRIP (homepage)
+   ============================================================ */
+
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-xl);
+  text-align: center;
+}
+
+@media (min-width: 600px) {
+  .stats-strip { grid-template-columns: repeat(4, 1fr); }
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.stat-number {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ============================================================
+   PHOTO STRIP (homepage Chi siamo)
+   ============================================================ */
+
+.photo-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.photo-strip img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 599px) {
+  .photo-strip { grid-template-columns: repeat(2, 1fr); }
+  .photo-strip img:last-child { display: none; }
+}
+
+/* ============================================================
+   BANNER 5×1000 (homepage)
+   ============================================================ */
+
+.banner-5x1000 {
+  background-color: var(--color-accent);
+  padding: 0.6rem 0;
+  font-size: 0.875rem;
+}
+
+.banner-5x1000 p {
+  color: #ffffff;
+  max-width: none;
+  line-height: 1.4;
+}
+
+.banner-5x1000 strong { color: #ffffff; }
+.banner-5x1000 em     { color: rgba(255,255,255,0.9); }
+
+.banner-cf {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  background: rgba(255,255,255,0.2);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.banner-5x1000.is-hidden { display: none; }
+
+.banner-5x1000-inner {
+  position: relative;
+  text-align: center;
+  padding-block: 0.1rem;
+}
+
+.banner-dismiss {
+  position: absolute;
+  right: var(--space-lg);
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ffffff;
+  opacity: 0.8;
+}
+
+.banner-dismiss:hover {
+  opacity: 1;
+  background-color: rgba(255,255,255,0.2);
+  color: #ffffff;
 }

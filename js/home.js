@@ -126,3 +126,13 @@ async function loadAvvisi() {
 
 loadPreview();
 loadAvvisi();
+
+// ── Banner 5×1000 dismissabile ──────────────────────────────────
+const banner = document.getElementById('banner-5x1000');
+if (banner) {
+  if (sessionStorage.getItem('banner5x1000_dismissed')) banner.classList.add('is-hidden');
+  banner.querySelector('.banner-dismiss')?.addEventListener('click', () => {
+    banner.classList.add('is-hidden');
+    sessionStorage.setItem('banner5x1000_dismissed', '1');
+  });
+}

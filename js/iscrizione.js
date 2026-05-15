@@ -196,9 +196,10 @@ function validaForm() {
   // Dati genitore (solo se minorenne)
   const sezioneGen = document.getElementById('sezione-genitore');
   if (!sezioneGen.classList.contains('hidden')) {
-    if (!document.getElementById('nome_genitore')?.value.trim())    segnaErrore('nome_genitore');
-    if (!document.getElementById('cognome_genitore')?.value.trim()) segnaErrore('cognome_genitore');
-    if (!document.getElementById('indirizzo_citta')?.value.trim())  segnaErrore('indirizzo_citta');
+    if (!document.getElementById('nome_genitore')?.value.trim())             segnaErrore('nome_genitore');
+    if (!document.getElementById('cognome_genitore')?.value.trim())          segnaErrore('cognome_genitore');
+    if (!document.getElementById('codice_fiscale_genitore')?.value.trim())   segnaErrore('codice_fiscale_genitore');
+    if (!document.getElementById('indirizzo_citta')?.value.trim())           segnaErrore('indirizzo_citta');
     if (!document.getElementById('indirizzo_cap')?.value.trim())    segnaErrore('indirizzo_cap');
     if (!document.getElementById('indirizzo_via')?.value.trim())    segnaErrore('indirizzo_via');
   }
@@ -244,8 +245,9 @@ async function inviaIscrizione() {
     email:                document.getElementById('email').value.trim(),
     telefono:             document.getElementById('telefono').value.trim() || null,
     telefono_emergenza:   document.getElementById('telefono_emergenza').value.trim() || null,
-    nome_genitore:        minore ? (document.getElementById('nome_genitore').value.trim() || null) : null,
-    cognome_genitore:     minore ? (document.getElementById('cognome_genitore').value.trim() || null) : null,
+    nome_genitore:            minore ? (document.getElementById('nome_genitore').value.trim() || null) : null,
+    cognome_genitore:         minore ? (document.getElementById('cognome_genitore').value.trim() || null) : null,
+    codice_fiscale_genitore:  minore ? (document.getElementById('codice_fiscale_genitore').value.trim().toUpperCase() || null) : null,
     indirizzo_citta:      minore ? (document.getElementById('indirizzo_citta').value.trim() || null) : null,
     indirizzo_cap:        minore ? (document.getElementById('indirizzo_cap').value.trim() || null) : null,
     indirizzo_via:        minore ? (document.getElementById('indirizzo_via').value.trim() || null) : null,

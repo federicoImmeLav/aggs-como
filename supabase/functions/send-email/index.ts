@@ -95,16 +95,37 @@ async function generateIscrizionePDF(record: Record<string, unknown>): Promise<s
   const telefono     = String(record.telefono ?? '');
   const emailAddr    = String(record.email ?? '');
   const anno         = String(record.anno_associativo ?? '2025-2026');
+  const cfRagazzo    = String(record.codice_fiscale ?? '');
+  const cfGenitore   = String(record.codice_fiscale_genitore ?? '');
+  const splitX       = margin + 250;
 
-  // ── Dati ─────────────────────────────────────────────────
+  // ── Dati genitore ────────────────────────────────────────
   draw('Il/La sottoscritto/a (genitore / esercente la responsabilità genitoriale)', margin, 9, font, darkColor);
   nl(16);
-  field('Nome e cognome del genitore', genitoreNome);
+  draw('Nome e cognome del genitore', margin, 8, font, grayColor);
+  draw('Codice fiscale del genitore', splitX + 10, 8, font, grayColor);
+  nl(12);
+  draw(genitoreNome || '—', margin, 10, fontBold, darkColor);
+  draw(cfGenitore || '—', splitX + 10, 10, fontBold, darkColor);
+  nl(6);
+  hLine(margin, splitX);
+  hLine(splitX + 10, pageWidth - margin);
+  nl(16);
 
   draw('CHIEDE IL TESSERAMENTO del/della proprio/a figlio/a all\'associazione:', margin, 9, font, darkColor);
   nl(18);
 
-  field('Cognome e nome del ragazzo/a', ragazzoNome);
+  // ── Dati ragazzo ─────────────────────────────────────────
+  draw('Cognome e nome del ragazzo/a', margin, 8, font, grayColor);
+  draw('Codice fiscale del ragazzo/a', splitX + 10, 8, font, grayColor);
+  nl(12);
+  draw(ragazzoNome || '—', margin, 10, fontBold, darkColor);
+  draw(cfRagazzo || '—', splitX + 10, 10, fontBold, darkColor);
+  nl(6);
+  hLine(margin, splitX);
+  hLine(splitX + 10, pageWidth - margin);
+  nl(16);
+
   field('Reparto', unita, margin + 200);
 
   // Telefono + Email — due colonne

@@ -42,8 +42,9 @@ create table if not exists soci (
   telefono             text,
   telefono_emergenza   text,
   -- Dati genitore (compilati solo se minorenne)
-  nome_genitore        text,
-  cognome_genitore     text,
+  nome_genitore            text,
+  cognome_genitore         text,
+  codice_fiscale_genitore  text,
   -- Consensi GDPR
   consenso_privacy     boolean not null default false,
   consenso_foto        boolean not null default false,
@@ -154,6 +155,7 @@ create policy "Lettura pubblica avvisi attivi"
 
 -- alter table attivita add column if not exists nota_iscrizioni text;
 alter table attivita add column if not exists documenti jsonb default '[]'::jsonb;
+alter table soci add column if not exists codice_fiscale_genitore text;
 -- documenti: array di oggetti [{ "nome": "Scheda medica", "url": "https://..." }]
 
 -- ============================================================

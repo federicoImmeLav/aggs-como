@@ -25,12 +25,12 @@ function cardHTML(a) {
     : '';
 
   return `
-<article class="card card-attivita">
+<article class="card card-attivita" style="display:flex;flex-direction:column">
   ${a.immagine_url
     ? `<img src="${a.immagine_url}" alt="${a.nome}" class="card-img" loading="lazy">`
     : `<div style="height:8rem;background:var(--color-primary-light);display:flex;align-items:center;justify-content:center;font-size:2.5rem" aria-hidden="true">⚜️</div>`
   }
-  <div class="card-body">
+  <div class="card-body" style="display:flex;flex-direction:column;flex:1">
     <div style="margin-bottom:var(--space-sm)">
       <span class="badge badge-${a.tipo}">${tipoLabel}</span>
     </div>
@@ -42,7 +42,7 @@ function cardHTML(a) {
       ? `<p style="max-width:none;font-size:0.9375rem;color:var(--color-text-muted);margin-bottom:var(--space-md)">${a.descrizione.slice(0,120)}${a.descrizione.length > 120 ? '…' : ''}</p>`
       : ''
     }
-    <a href="attivita.html?id=${a.id}" class="btn btn-primary btn-sm">
+    <a href="attivita.html?id=${a.id}" class="btn btn-primary btn-sm" style="margin-top:auto;align-self:flex-start">
       ${a.ha_form_iscrizione ? 'Iscriviti' : 'Dettagli'}
     </a>
   </div>

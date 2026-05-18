@@ -297,6 +297,7 @@
   background:
     linear-gradient(rgba(0,40,100,0.62), rgba(0,40,100,0.72)),
     url('../assets/hero.webp') center / cover no-repeat;
+  background-attachment: fixed;
   color: #ffffff;
   min-height: calc(100dvh - 4rem);
   display: flex;
